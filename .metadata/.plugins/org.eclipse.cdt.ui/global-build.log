@@ -1,0 +1,4 @@
+10:48:08 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\memoriaDinamica.o" "..\\src\\memoriaDinamica.c" 
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 

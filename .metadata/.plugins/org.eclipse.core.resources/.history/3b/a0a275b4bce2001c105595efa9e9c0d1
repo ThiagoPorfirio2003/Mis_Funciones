@@ -1,0 +1,18 @@
+/*
+ * constructor.c
+ *
+ *  Created on: 2 jun. 2022
+ *      Author: thiag
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+int* newInt()
+{
+	int* newInt;
+	newInt =NULL;
+
+}

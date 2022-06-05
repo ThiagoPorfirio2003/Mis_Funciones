@@ -1,0 +1,8 @@
+12:16:15 **** Rebuild of configuration Debug for project Ejercicio-5-Vectores ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Ejercicio-5-Vectores.o" "..\\src\\Ejercicio-5-Vectores.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\funciones.o" "..\\src\\funciones.c" 
+gcc -o Ejercicio-5-Vectores.exe "src\\Ejercicio-5-Vectores.o" "src\\funciones.o" 
+
+12:16:16 Build Finished. 0 errors, 0 warnings. (took 562ms)
+

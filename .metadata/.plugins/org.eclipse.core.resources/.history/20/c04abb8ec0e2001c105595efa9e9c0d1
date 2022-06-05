@@ -1,0 +1,61 @@
+/*
+ * memoriaDinamica.c
+ *
+ *  Created on: 2 jun. 2022
+ *      Author: thiag
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+int* newInt()
+{
+	int* newInt;
+	newInt = NULL;
+
+	newInt= (int*) malloc(sizeof(int));
+
+	return newInt;
+}
+
+float* newFloat()
+{
+	float* newFloat;
+	newFloat = NULL;
+
+	newFloat= (float*) malloc(sizeof(float));
+
+	return newFloat;
+}
+
+char* newChar()
+{
+	char* newChar;
+	newChar = NULL;
+
+	newChar= (char*) malloc(sizeof(char));
+
+	return newChar;
+}
+
+int redimensionarInt(int* punteroAReDimensionar, int nuevaLongitud)
+{
+	int retorno;
+	int* bufferInt;
+
+	bufferInt = NULL;
+	retorno =1;
+
+	if(punteroAReDimensionar !=NULL && nuevaLongitud > 0)
+	{
+		bufferInt= (int*) realloc(punteroAReDimensionar, sizeof(int)* nuevaLongitud);
+		if(bufferInt != NULL)
+		{
+			punteroAReDimensionar = bufferInt;
+			retorno =0;
+		}
+	}
+
+	return retorno;
+}

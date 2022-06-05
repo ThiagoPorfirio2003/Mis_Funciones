@@ -1,0 +1,42 @@
+/*
+ * encontrarDato.c
+ *
+ *  Created on: 30 may. 2022
+ *      Author: thiag
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "utn.h"
+
+int pedirYConseguirMayorNumero(int* numeroMayor, char* mensaje, char* mensajeError, int minimo, int maximo)
+{
+	int retorno;
+	int numeroAIngresar;
+
+	retorno=1;
+
+	if(numeroMayor !=NULL && mensaje !=NULL && mensajeError !=NULL)
+	{
+		int utn_getIntRango(int* direccionInt, char* mensaje, char* mensajeError, int minimo, int maximo);
+	}
+
+	return retorno;
+}
+
+int recibirYConseguirMayorNumero()
+{
+	int retorno;
+
+	retorno=1;
+
+	if(1)
+	{
+
+	}
+
+	return retorno;
+}
+

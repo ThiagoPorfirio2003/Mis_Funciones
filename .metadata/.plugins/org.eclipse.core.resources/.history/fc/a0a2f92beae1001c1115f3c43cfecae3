@@ -1,0 +1,126 @@
+/*
+ * findDato.c
+ *
+ *  Created on: 1 jun. 2022
+ *      Author: thiag
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "utn.h"
+
+
+int find_GuardarMayorInt(int* direccionNumeroMayor, int numeroRecibido, int* direccionBanderaNumeroMaximo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(direccionNumeroMayor != NULL && direccionBanderaNumeroMaximo !=NULL)
+	{
+		retorno =0;
+		if(*direccionBanderaNumeroMaximo || *direccionNumeroMayor<numeroRecibido)
+		{
+			*direccionNumeroMayor=numeroRecibido;
+			*direccionBanderaNumeroMaximo=0;
+		}
+	}
+	return retorno;
+}
+
+int find_GuardarMenorInt(int* direccionNumeroMenor, int numeroRecibido, int* direccionBanderaNumeroMenor)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(direccionNumeroMenor != NULL && direccionBanderaNumeroMenor !=NULL)
+	{
+		retorno =0;
+		if(*direccionBanderaNumeroMenor || *direccionNumeroMenor>numeroRecibido)
+		{
+			*direccionNumeroMenor=numeroRecibido;
+			*direccionBanderaNumeroMenor=0;
+		}
+	}
+	return retorno;
+}
+
+int getMenorOMayorInt(int* numeroMayorMenor, int numeroRecibido, int* banderaMayorMenor, int (*funcionMayorMenor)(int*,int,int*))
+{
+	int retorno;
+
+	retorno=1;
+
+	if(numeroMayorMenor!=NULL && banderaMayorMenor!=NULL && *funcionMayorMenor != NULL)
+	{
+		if(!(funcionMayorMenor(numeroMayorMenor, numeroRecibido, banderaMayorMenor)))
+		{
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+int find_BuscarMayorInt(int* numeroMayor, int numeroRecibido, int* banderaNumeroMaximo, int cantidadNumeros, int* direccionPrimerNumero)
+{
+	int retorno;
+	retorno =1;
+
+	if(numeroMayor != NULL && banderaNumeroMaximo != NULL && direccionPrimerNumero !=NULL && cantidadNumeros > 0)
+	{
+		for(int i=0;i<cantidadNumeros;i++)
+		{
+			if(!(find_GuardarMayorInt(numeroMayor,)))
+			{
+
+			}
+		}
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+/*
+int findNumeroMedio(int* cadenaInt, int tamanioCadena,int opcionNumeroIgual)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(cadenaInt !=NULL && tamanioCadena > 0)
+	{
+	//	= tamanioCadena/2;
+	}
+
+	return retorno;
+}
+
+int pedirYConseguirMayorNumero(int* numeroMayor, int cantidadDeNumeros, char* mensaje, char* mensajeError, int minimo, int maximo)
+{
+	int retorno;
+	int numeroAIngresar;
+	int banderaNumeroMaximo;
+
+	banderaNumeroMaximo=1;
+	retorno=1;
+
+	if(numeroMayor !=NULL && mensaje !=NULL && mensajeError !=NULL && cantidadDeNumeros >0)
+	{
+		for(int i;i<cantidadDeNumeros;i++)
+		{
+			if(!(utn_getIntRango(&numeroAIngresar, mensaje, mensajeError, minimo, maximo)))
+			{
+				/*if(recibirYConseguirMayorNumero(&numeroMayor, numeroAIngresar, &banderaNumeroMaximo))
+				{
+					break;
+				} //
+			}
+		}
+		retorno =0;
+	}
+	return retorno;
+}
+*/

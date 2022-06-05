@@ -1,0 +1,17 @@
+/*
+ * encontrarDato.h
+ *
+ *  Created on: 30 may. 2022
+ *      Author: thiag
+ */
+
+#ifndef ENCONTRARDATO_H_
+#define ENCONTRARDATO_H_
+
+int getMayorInt(int* numeroMayor, int numeroRecibido, int* banderaNumeroMaximo);
+
+int getMenorInt(int* numeroMenor, int numeroRecibido, int* banderaNumeroMenor);
+
+int getMenorOMayorInt(int* numeroMayor_Menor, int numeroRecibido, int banderaMayorMenor, int (*funcionMayorMenor)(int*,int,int*));
+
+#endif /* ENCONTRARDATO_H_ */

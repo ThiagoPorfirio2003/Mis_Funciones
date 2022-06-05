@@ -1,0 +1,21 @@
+/*
+ * findDato.h
+ *
+ *  Created on: 1 jun. 2022
+ *      Author: thiag
+ */
+
+#ifndef FINDDATO_H_
+#define FINDDATO_H_
+
+int find_GuardarMayorInt(int* direccionNumeroMayor, int numeroRecibido, int* direccionBanderaNumeroMaximo);
+
+int find_GuardarMenorInt(int* numeroMenor, int numeroRecibido, int* banderaNumeroMenor);
+
+int find_BuscarMayorInt(int* direccionNumeroMayor, int* direccionBanderaNumeroMaximo, int cantidadNumeros, int* direccionPrimerNumero);
+
+int find_BuscarMayorInt(int* direccionNumeroMenor, int* direccionBanderaNumeroMenor, int cantidadNumeros, int* direccionPrimerNumero);
+
+int guardarMenorOMayorInt(int* numeroMayorMenor, int numeroRecibido, int* banderaMayorMenor, int (*funcionMayorMenor)(int*,int,int*), int eleccionMayorMenor);
+
+#endif /* FINDDATO_H_ */

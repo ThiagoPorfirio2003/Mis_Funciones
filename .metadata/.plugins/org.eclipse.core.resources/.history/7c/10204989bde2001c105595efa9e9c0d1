@@ -1,0 +1,20 @@
+/*
+ * memoriaDinamica.c
+ *
+ *  Created on: 2 jun. 2022
+ *      Author: thiag
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+int* newInt()
+{
+	int* newInt;
+	newInt = NULL;
+
+	newInt= (int*) malloc(sizeof(int));
+
+	return newInt;
+}

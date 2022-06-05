@@ -1,0 +1,17 @@
+/*
+ * memoriaDinamica.h
+ *
+ *  Created on: 2 jun. 2022
+ *      Author: thiag
+ */
+
+#ifndef MEMORIADINAMICA_H_
+#define MEMORIADINAMICA_H_
+
+int* newInt();
+
+float* newFloat();
+
+char* newChar();
+
+#endif /* MEMORIADINAMICA_H_ */
