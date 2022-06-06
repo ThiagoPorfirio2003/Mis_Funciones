@@ -1,0 +1,43 @@
+/*
+ * array.c
+ *
+ *  Created on: 5 jun. 2022
+ *      Author: thiag
+ */
+#include <stdlib.h>
+
+int array_SwapCambiarPosicionInt(int* punteroPrimerInt, int* punteroSegundoInt)
+{
+	int retorno;
+	int auxiliar;
+
+	retorno=1;
+
+	if(punteroInt != NULL)
+	{
+		auxiliar = *(punteroInt-1);
+		*(punteroInt-1)= *punteroInt;
+		*punteroInt=auxiliar;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int array_SwapInt(int* )
+{
+	int retorno;
+	int auxiliar;
+
+	retorno=1;
+
+	if(punteroInt != NULL)
+	{
+		auxiliar = *(punteroInt-1);
+		*(punteroInt-1)= *punteroInt;
+		*punteroInt=auxiliar;
+		retorno=0;
+	}
+
+	return retorno;
+}

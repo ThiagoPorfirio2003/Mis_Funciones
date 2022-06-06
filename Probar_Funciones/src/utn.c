@@ -9,10 +9,42 @@ int static myGets(char* direccionCadenaCaracteres, int longitud)
 	int retorno;
 	char* bufferString;
 
+	retorno = 1;
+	if(longitud>1 && direccionCadenaCaracteres != NULL)
+	{
+		bufferString=NULL;
+		bufferString= memoria_NewCharConTamanio(longitud);
+
+		if(bufferString!=NULL)
+		{
+			fflush(stdin);
+			if(fgets(bufferString, sizeof(char)* longitud, stdin) != NULL)
+			{
+				if(*(bufferString +strnlen(bufferString, sizeof(char)* longitud)-1) == '\n')
+				{
+					*(bufferString +strnlen(bufferString, sizeof(char)* longitud)-1) = '\0';
+				}
+				if(strnlen(bufferString, sizeof(char)* longitud) < longitud)
+				{
+					strncpy(direccionCadenaCaracteres, bufferString, longitud);
+					retorno = 0;
+				}
+			}
+			free(bufferString);
+		}
+	}
+	return retorno;
+}
+/*
+int static myGets(char* direccionCadenaCaracteres, int longitud)
+{
+	int retorno;
+	char* bufferString;
+
 	bufferString = memoria_PrepararPunteroChar(longitud);
 	retorno = 1;
 
-	if(direccionCadenaCaracteres != NULL && bufferString !=NULL && longitud > 2)
+	if(direccionCadenaCaracteres != NULL && bufferString !=NULL && longitud > 0)
 	{
 		fflush(stdin);
 		if(fgets(bufferString, sizeof(char)* longitud, stdin) != NULL)
@@ -31,6 +63,7 @@ int static myGets(char* direccionCadenaCaracteres, int longitud)
 	}
 	return retorno;
 }
+*/
 
 int utn_verificarSerInt(char* cadenaDeCaracteres)
 {
@@ -40,11 +73,13 @@ int utn_verificarSerInt(char* cadenaDeCaracteres)
 	if(cadenaDeCaracteres != NULL && *cadenaDeCaracteres != '0')
 	{
 		retorno=0;
+
 		if(*cadenaDeCaracteres == '-' ||
 				*cadenaDeCaracteres == '+')
 		{
 			cadenaDeCaracteres++;
 		}
+
 		do{
 			if(isdigit(*cadenaDeCaracteres) == 0)
 			{
@@ -77,7 +112,7 @@ int utn_verificarSerFloat(char* cadenaDeCaracteres)
 			{
 				if(contadorPuntos <2 && *cadenaDeCaracteres== '.')
 				{
-				contadorPuntos++;
+					contadorPuntos++;
 				}
 				else
 				{
@@ -170,13 +205,22 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 		retorno =0;
 
 		do{
-			if(isspace(*cadenaDeCaracteres) == 0 &&
-				!utn_VerificarSerLetra(cadenaDeCaracteres))
+			if(utn_VerificarSerLetra(cadenaDeCaracteres))
 			{
-				retorno = 1;
-				break;
+				if(isspace(*cadenaDeCaracteres))
+				{
+					if(*(cadenaDeCaracteres+1)=='\0')
+					{
+						retorno=1;
+						break;
+					}
+				}
+				else
+				{
+					retorno=1;
+					break;
+				}
 			}
-
 			cadenaDeCaracteres++;
 		}while(*cadenaDeCaracteres != '\0');
 	}
@@ -188,9 +232,11 @@ int static getInt(int* direccionInt, int cantidadDeCifras)
 	int retorno;
 	char* bufferInt;
 
+	cantidadDeCifras+=2;
 	bufferInt = memoria_PrepararPunteroChar(cantidadDeCifras);
 	retorno =1;
-	if(direccionInt !=NULL)
+
+	if(direccionInt !=NULL && bufferInt!=NULL)
 	{
 		if(!(myGets(bufferInt, cantidadDeCifras)) && !(utn_verificarSerInt(bufferInt)))
 		{
@@ -206,13 +252,15 @@ int static getInt(int* direccionInt, int cantidadDeCifras)
 int static getFloat(float* direccionFloat, int cantidadDeCifras)
 {
 	int retorno;
-	char *bufferFloat;
+	char* bufferFloat;
 
+	cantidadDeCifras+=2;
 	bufferFloat = memoria_PrepararPunteroChar(cantidadDeCifras);
 	retorno =1;
-	if(direccionFloat !=NULL)
+
+	if(direccionFloat !=NULL && bufferFloat !=NULL)
 	{
-		if(!(myGets(bufferFloat, cantidadDeCifras)) && strlen(bufferFloat)+1<cantidadDeCifras && !(utn_verificarSerFloat(bufferFloat)))
+		if(!(myGets(bufferFloat, cantidadDeCifras)) && !(utn_verificarSerFloat(bufferFloat)))
 		{
 			*direccionFloat = atof(bufferFloat);
 			retorno =0;
@@ -227,100 +275,24 @@ int static getNombre(char* direccionPalabra, int cantidadDeCaracteres)
 	int retorno;
 	char* bufferPalabra;
 
-	bufferPalabra = memoria_PrepararPunteroChar(cantidadDeCaracteres);
-
 	retorno=1;
 
-	if(direccionPalabra !=NULL)
+	if(direccionPalabra!=NULL && cantidadDeCaracteres>1)
 	{
-		if(!(myGets(bufferPalabra, cantidadDeCaracteres)) && !(utn_verificarSerNombre(bufferPalabra)))
+		bufferPalabra=NULL;
+		bufferPalabra = memoria_NewCharConTamanio(cantidadDeCaracteres);
+
+		if(bufferPalabra!=NULL)
 		{
-			retorno=0;
-			strcpy(direccionPalabra, bufferPalabra);
+			if(!(myGets(bufferPalabra, cantidadDeCaracteres)) && !(utn_verificarSerNombre(bufferPalabra)))
+			{
+				retorno=0;
+				strncpy(direccionPalabra, bufferPalabra, cantidadDeCaracteres);
+			}
+			free(bufferPalabra);
 		}
-		free(bufferPalabra);
 	}
-	return retorno;
-}
 
-int utn_getIntRango(int* direccionInt, char* mensaje, char* mensajeError, int minimo, int maximo, int cantidadDeCifras)
-{
-	int retorno;
-	int bufferInt;
-
-	retorno=1;
-
-	if(direccionInt!=NULL &&
-			mensaje!=NULL &&
-			mensajeError!=NULL &&
-			minimo<=maximo
-			&& cantidadDeCifras > 0)
-	{
-		cantidadDeCifras+=2;
-		printf("%s", mensaje);
-		while(getInt(&bufferInt,cantidadDeCifras) || bufferInt < minimo || bufferInt > maximo)
-		{
-			printf("%s", mensajeError);
-		}
-		*direccionInt = bufferInt;
-		retorno=0;
-	}
-	return retorno;
-}
-
-int utn_getFloatRango(float* direccionFloat, char* mensaje, char* mensajeError, float minimo, float maximo, int cantidadDeCifras)
-{
-	int retorno;
-	float bufferFloat;
-
-	retorno=1;
-
-	if(direccionFloat!=NULL &&
-			mensaje!=NULL &&
-			mensajeError!=NULL &&
-			minimo<=maximo &&
-			cantidadDeCifras>0)
-	{
-		cantidadDeCifras+=2;
-		printf("%s", mensaje);
-		while(getFloat(&bufferFloat, cantidadDeCifras) || bufferFloat < minimo || bufferFloat > maximo)
-		{
-			printf("%s", mensajeError);
-		}
-		*direccionFloat = bufferFloat;
-		retorno=0;
-	}
-	return retorno;
-}
-
-int utn_GetNombre(char* direccionPalabra, char* mensaje, char* mensajeError, int cantidadMinimaCaracteres, int cantidadMaximaCaracteres, int cantidadDeCaracteres)
-{
-	int retorno;
-	char* bufferPalabra;
-
-	bufferPalabra = memoria_PrepararPunteroChar(cantidadDeCaracteres);
-	retorno =1;
-
-	if(direccionPalabra != NULL &&
-			mensaje != NULL &&
-			mensajeError !=NULL &&
-			cantidadMinimaCaracteres > 0 &&
-			cantidadMaximaCaracteres >= cantidadMinimaCaracteres &&
-			cantidadDeCaracteres >0 &&
-			cantidadMaximaCaracteres < cantidadDeCaracteres)
-	{
-		printf("%s", mensaje);
-		while(getNombre(bufferPalabra, cantidadDeCaracteres) ||
-				strlen(bufferPalabra) < cantidadMinimaCaracteres ||
-				strlen(bufferPalabra) > cantidadMaximaCaracteres)
-		{
-			printf("%s", mensajeError);
-		}
-		retorno =0;
-		utn_CorregirNombre(bufferPalabra);
-		strcpy(direccionPalabra, bufferPalabra);
-		free(bufferPalabra);
-	}
 	return retorno;
 }
 
@@ -345,32 +317,6 @@ int utn_trasnformarCadenaAMayuscula(char* direccionCadena)
 	return retorno;
 }
 
-/*
-int utn_getLetraRango(char* direccionLetra, char* mensaje, char* mensajeError, char letraMinima, char letraMaxima)
-{
-	int retorno;
-	char bufferLetra[1024];
-
-	retorno=1;
-
-	if(direccionLetra!=NULL &&
-			mensaje!=NULL &&
-			mensajeError!=NULL &&
-
-			letraMinima<=letraMaxima)
-	{
-
-		printf("%s", mensaje);
-		while(utn_getNombre(bufferLetra) || *bufferLetra < letraMinima || *bufferLetra > letraMaxima || strnlen(bufferLetra, sizeof(bufferLetra)) != 1)
-		{
-			printf("%s", mensajeError);
-		}
-		*direccionLetra = *bufferLetra;
-		retorno=0;
-	}
-	return retorno;
-}
-*/
 int utn_CorregirNombre(char* direccionPalabra)
 {
 	int retorno;
@@ -406,6 +352,117 @@ int utn_CorregirNombre(char* direccionPalabra)
 			direccionPalabra++;
 		}
 	}
+	return retorno;
+}
+
+int utn_GetIntRango(int* direccionInt, char* mensaje, char* mensajeError, int minimo, int maximo, int cantidadDeCifras)
+{
+	int retorno;
+	int bufferInt;
+
+	retorno=1;
+
+	if(direccionInt!=NULL &&
+			mensaje!=NULL &&
+			mensajeError!=NULL &&
+			minimo<=maximo
+			&& cantidadDeCifras > 0)
+	{
+		printf("%s", mensaje);
+		while(getInt(&bufferInt,cantidadDeCifras) || bufferInt < minimo || bufferInt > maximo)
+		{
+			printf("%s", mensajeError);
+		}
+		*direccionInt = bufferInt;
+		retorno=0;
+	}
+	return retorno;
+}
+
+int utn_GetFloatRango(float* direccionFloat, char* mensaje, char* mensajeError, float minimo, float maximo, int cantidadDeCifras)
+{
+	int retorno;
+	float bufferFloat;
+
+	retorno=1;
+
+	if(direccionFloat!=NULL &&
+			mensaje!=NULL &&
+			mensajeError!=NULL &&
+			minimo<=maximo &&
+			cantidadDeCifras>0)
+	{
+		printf("%s", mensaje);
+		while(getFloat(&bufferFloat, cantidadDeCifras) || bufferFloat < minimo || bufferFloat > maximo)
+		{
+			printf("%s", mensajeError);
+		}
+		*direccionFloat = bufferFloat;
+		retorno=0;
+	}
+	return retorno;
+}
+
+int utn_GetNombre(char* direccionPalabra, char* mensaje, char* mensajeError, int cantidadMinimaCaracteres, int cantidadMaximaCaracteres, int cantidadDeCaracteres)
+{
+	int retorno;
+	char* bufferAuxiliar;
+
+	bufferAuxiliar=memoria_NewCharConTamanio(cantidadDeCaracteres);
+	retorno =1;
+
+	if(direccionPalabra != NULL &&
+			mensaje != NULL &&
+			mensajeError !=NULL &&
+			cantidadMinimaCaracteres > 0 &&
+			cantidadMaximaCaracteres >= cantidadMinimaCaracteres &&
+			cantidadDeCaracteres >0 &&
+			cantidadMaximaCaracteres <= cantidadDeCaracteres)
+	{
+		printf("%s", mensaje);
+		while(getNombre(bufferAuxiliar, cantidadDeCaracteres) ||
+				strlen(bufferAuxiliar) < cantidadMinimaCaracteres ||
+				strlen(bufferAuxiliar) > cantidadMaximaCaracteres)
+		{
+			printf("\nERROR\n");
+			printf("\n\n%d\n\n", strlen(bufferAuxiliar));
+			printf("%s\n", bufferAuxiliar);
+			printf("%s", mensajeError);
+			//free(bufferAuxiliar);
+		}
+		utn_CorregirNombre(bufferAuxiliar);
+		strcpy(direccionPalabra, bufferAuxiliar);
+		retorno =0;
+		free(bufferAuxiliar);
+	}
+
+	return retorno;
+}
+
+int utn_UnirNombreYApellido(char* nombre, char* apellido, char* depositoDeNombreYApellido)
+{
+	int retorno;
+	int cantidadCaracteres;
+	retorno=1;
+
+	if(nombre!=NULL && apellido!=NULL && depositoDeNombreYApellido!=NULL)
+	{
+		cantidadCaracteres = strlen(nombre)+ strlen(apellido);
+		cantidadCaracteres+=3;
+
+		depositoDeNombreYApellido=memoria_PrepararPunteroChar(cantidadCaracteres);
+		if(depositoDeNombreYApellido!=NULL)
+		{
+			sprintf(depositoDeNombreYApellido,"%s, %s", apellido,nombre);
+		}
+		if(*(depositoDeNombreYApellido+cantidadCaracteres)== '\0')
+		{
+			printf("\n\nHay BARRA0\n\n");
+		}
+		//*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
+		retorno=0;
+	}
+
 	return retorno;
 }
 
@@ -513,6 +570,68 @@ int utn_getCadenaAlfanuerica(char* direccionPalabra, char* mensaje, char* mensaj
 		}
 		retorno =0;
 		strncpy(direccionPalabra, bufferPalabra, longitudPalabra);
+	}
+	return retorno;
+}
+
+int utn_getLetraRango(char* direccionLetra, char* mensaje, char* mensajeError, char letraMinima, char letraMaxima)
+{
+	int retorno;
+	char bufferLetra[1024];
+
+	retorno=1;
+
+	if(direccionLetra!=NULL &&
+			mensaje!=NULL &&
+			mensajeError!=NULL &&
+
+			letraMinima<=letraMaxima)
+	{
+
+		printf("%s", mensaje);
+		while(utn_getNombre(bufferLetra) || *bufferLetra < letraMinima || *bufferLetra > letraMaxima || strnlen(bufferLetra, sizeof(bufferLetra)) != 1)
+		{
+			printf("%s", mensajeError);
+		}
+		*direccionLetra = *bufferLetra;
+		retorno=0;
+	}
+	return retorno;
+}
+*/
+
+///
+/*
+int utn_GetNombre(char* direccionPalabra, char* mensaje, char* mensajeError, int cantidadMinimaCaracteres, int cantidadMaximaCaracteres, int cantidadDeCaracteres)
+{
+	int retorno;
+	char* bufferAuxiliar;
+
+	bufferAuxiliar= memoria_PrepararPunteroChar(cantidadDeCaracteres);
+
+	retorno =1;
+
+	if(direccionPalabra != NULL &&
+			mensaje != NULL &&
+			mensajeError !=NULL &&
+			cantidadMinimaCaracteres > 0 &&
+			cantidadMaximaCaracteres >= cantidadMinimaCaracteres &&
+			cantidadDeCaracteres >0 &&
+			cantidadMaximaCaracteres <= cantidadDeCaracteres)
+	{
+		printf("%s", mensaje);
+		while(getNombre(bufferAuxiliar, cantidadDeCaracteres) ||
+				strlen(bufferAuxiliar) < cantidadMinimaCaracteres ||
+				strlen(bufferAuxiliar) > cantidadMaximaCaracteres)
+		{
+			printf("\n\n%d\n\n", strlen(bufferAuxiliar));
+			printf("%s", mensajeError);
+		}
+		printf("\n\nLLega aca\n\n");
+		utn_CorregirNombre(bufferAuxiliar);
+		strcpy(direccionPalabra, bufferAuxiliar);
+		free(bufferAuxiliar);
+		retorno =0;
 	}
 	return retorno;
 }

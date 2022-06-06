@@ -9,35 +9,55 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int* memoria_NewInt()
+int* memoria_NewInt(int* punteroEstaticoInt)
 {
-	int* newInt;
-	newInt = NULL;
-	newInt= (int*) malloc(sizeof(int));
+	int retorno;
 
-	return newInt;
+	retorno=1;
+	punteroEstaticoInt= (int*) malloc(sizeof(int));
+
+	if(punteroEstaticoInt != NULL)
+	{
+		retorno=0;
+	}
+
+	return retorno;
 }
 
-float* memoria_NewFloat()
+float* memoria_NewFloat(float* punteroEstaticoFloat)
 {
-	float* newFloat;
-	newFloat = NULL;
+	int retorno;
 
-	newFloat= (float*) malloc(sizeof(float));
+	retorno=1;
+	punteroEstaticoFloat= (float*) malloc(sizeof(float));
 
-	return newFloat;
+	if(punteroEstaticoFloat != NULL)
+	{
+		retorno=0;
+	}
+
+	return retorno;
 }
 
 char* memoria_NewChar()
 {
-	char* newChar;
-	newChar = NULL;
+	char* punteroChar;
 
-	newChar= (char*) malloc(sizeof(char));
+	punteroChar= (char*) malloc(sizeof(char));
 
-	return newChar;
+	return punteroChar;
 }
 
+char* memoria_NewCharConTamanio(int longitud)
+{
+	char* punteroDinamicoChar;
+
+	punteroDinamicoChar= (char*) malloc(sizeof(char)* longitud);
+
+	return punteroDinamicoChar;
+}
+
+/*
 int memoria_ReSizePunteroInt(int* punteroIntADimensionar, int nuevaLongitud)
 {
 	int retorno;
@@ -84,6 +104,8 @@ int memoria_ReSizePunteroChar(char* punteroCharADimensionar, int nuevaLongitud)
 	char* bufferChar;
 
 	bufferChar = NULL;
+	bufferChar = memoria_NewChar();
+
 	retorno =1;
 
 	if(punteroCharADimensionar !=NULL && nuevaLongitud > 0)
@@ -98,6 +120,35 @@ int memoria_ReSizePunteroChar(char* punteroCharADimensionar, int nuevaLongitud)
 	return retorno;
 }
 
+int memoria_nose(char* punteroDinamico, int longitud)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(longitud>0)
+	{
+		punteroDinamico=(char*) malloc(sizeof(char)*longitud);
+		if(punteroDinamico!=NULL)
+		{
+			retorno=0;
+		}
+	}
+	printf("Antes de crear DINAMICO\n");
+	punteroDinamico=(char*) malloc(sizeof(char)*longitud);
+	printf("DESPUES de crear DINAMICO\n");
+
+	if(punteroDinamico !=NULL && longitud>0 && !memoria_ReSizePunteroChar(punteroDinamico, longitud))
+	{
+		retorno=0;
+	}
+
+
+	return retorno;
+}
+
+
+/*
 int* memoria_PrepararPunteroInt(int longitudPunteroInt)
 {
 	int* punteroInt;
@@ -112,7 +163,7 @@ int* memoria_PrepararPunteroInt(int longitudPunteroInt)
 	return punteroInt;
 }
 
-float* memoria_PrepararPunteroFloat(float longitudPunteroFloat)
+float* memoria_PrepararPunteroFloat(int longitudPunteroFloat)
 {
 	float* punteroFloat;
 
@@ -126,16 +177,36 @@ float* memoria_PrepararPunteroFloat(float longitudPunteroFloat)
 	return punteroFloat;
 }
 
-char* memoria_PrepararPunteroChar(char longitudPunteroChar)
+char* memoria_PrepararPunteroChar(int* punteroADimensionar, int longitudPunteroChar)
 {
+	/*
 	char* punteroChar;
 
+	printf("Antes de crear DINAMICO\n");
 	punteroChar=memoria_NewChar();
+	printf("DESPUES de crear DINAMICO\n");
 
-	if(memoria_ReSizePunteroChar(punteroChar, longitudPunteroChar))
+	if(memoria_ReSizePunteroChar(punteroADimensionar, longitudPunteroChar))
 	{
-		punteroChar = NULL;
+		punteroADimensionar = NULL;
 	}
 
-	return punteroChar;
+	return punteroADimensionar;
+}
+*/
+
+
+
+int memoria_EliminarPosicionArrayInt(int* punteroInt, int longitudPunteroInt, int posicionAEliminar)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(punteroInt != NULL && longitudPunteroInt > 0 && posicionAEliminar > -1)
+	{
+
+	}
+
+	return retorno;
 }

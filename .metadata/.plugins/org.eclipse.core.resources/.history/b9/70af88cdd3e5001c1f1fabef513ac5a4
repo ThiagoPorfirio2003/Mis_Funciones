@@ -1,0 +1,228 @@
+/*
+ * memoriaDinamica.c
+ *
+ *  Created on: 2 jun. 2022
+ *      Author: thiag
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+int memoria_NewInt(int* punteroEstatico)
+{
+	int* newInt;
+	int retorno;
+
+	retorno=1;
+	punteroEstatico= (int*) malloc(sizeof(int));
+	if(punteroEstatico != NULL)
+	{
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int memoria_NewFloat()
+{
+	float* newFloat;
+
+	newFloat = NULL;
+	newFloat= (float*) malloc(sizeof(float));
+
+	return newFloat;
+}
+
+int memoria_NewChar()
+{
+	char* newChar;
+
+	newChar = NULL;
+	printf("Llega Antes del malloc\n");
+
+	newChar= (char*) malloc(sizeof(char));
+
+	printf("Cruzo el mallocc\n");
+	return newChar;
+}
+
+char* memoria_NewCharConTamanio(int longitud)
+{
+	if()
+	char* newChar;
+
+	newChar = NULL;
+	printf("Llega Antes del malloc\n");
+
+	newChar= (char*) malloc(sizeof(char));
+
+	printf("Cruzo el mallocc\n");
+	return newChar;
+}
+
+int memoria_ReSizePunteroInt(int* punteroIntADimensionar, int nuevaLongitud)
+{
+	int retorno;
+	int* bufferInt;
+
+	bufferInt = NULL;
+	retorno =1;
+
+	if(punteroIntADimensionar !=NULL && nuevaLongitud > 0)
+	{
+		bufferInt= (int*) realloc(punteroIntADimensionar, sizeof(int)* nuevaLongitud);
+		if(bufferInt != NULL)
+		{
+			punteroIntADimensionar = bufferInt;
+			retorno =0;
+		}
+	}
+	return retorno;
+}
+
+int memoria_ReSizePunteroFloat(float* punteroFloatADimensionar, int nuevaLongitud)
+{
+	int retorno;
+	float* bufferFloat;
+
+	bufferFloat = NULL;
+	retorno =1;
+
+	if(punteroFloatADimensionar !=NULL && nuevaLongitud > 0)
+	{
+		bufferFloat= (float*) realloc(punteroFloatADimensionar, sizeof(float)* nuevaLongitud);
+		if(bufferFloat != NULL)
+		{
+			punteroFloatADimensionar = bufferFloat;
+			retorno =0;
+		}
+	}
+	return retorno;
+}
+
+int memoria_ReSizePunteroChar(char* punteroCharADimensionar, int nuevaLongitud)
+{
+	int retorno;
+	char* bufferChar;
+
+	bufferChar = NULL;
+	bufferChar = memoria_NewChar();
+
+	retorno =1;
+
+	if(punteroCharADimensionar !=NULL && nuevaLongitud > 0)
+	{
+		bufferChar= (char*) realloc(punteroCharADimensionar, sizeof(char)* nuevaLongitud);
+		if(bufferChar != NULL)
+		{
+			punteroCharADimensionar = bufferChar;
+			retorno =0;
+		}
+	}
+	return retorno;
+}
+
+int memoria_nose(char* punteroDinamico, int longitud)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(longitud>0)
+	{
+		punteroDinamico=(char*) malloc(sizeof(char)*longitud);
+		if(punteroDinamico!=NULL)
+		{
+			retorno=0;
+		}
+	}
+	printf("Antes de crear DINAMICO\n");
+	punteroDinamico=(char*) malloc(sizeof(char)*longitud);
+	printf("DESPUES de crear DINAMICO\n");
+
+	if(punteroDinamico !=NULL && longitud>0 && !memoria_ReSizePunteroChar(punteroDinamico, longitud))
+	{
+		retorno=0;
+	}
+
+
+	return retorno;
+}
+
+int memoria_PrepararPunteroChar(int* punteroADimensionar, int longitudPunteroChar)
+{
+
+	printf("Antes de crear DINAMICO\n");
+	punteroADimensionar=;
+	printf("DESPUES de crear DINAMICO\n");
+
+	if(memoria_ReSizePunteroChar(punteroADimensionar, longitudPunteroChar))
+	{
+		punteroADimensionar = NULL;
+	}
+
+	return punteroADimensionar;
+}
+/*
+int* memoria_PrepararPunteroInt(int longitudPunteroInt)
+{
+	int* punteroInt;
+
+	punteroInt=memoria_NewInt();
+
+	if(memoria_ReSizePunteroInt(punteroInt, longitudPunteroInt))
+	{
+		punteroInt = NULL;
+	}
+
+	return punteroInt;
+}
+
+float* memoria_PrepararPunteroFloat(int longitudPunteroFloat)
+{
+	float* punteroFloat;
+
+	punteroFloat=memoria_NewFloat();
+
+	if(memoria_ReSizePunteroFloat(punteroFloat, longitudPunteroFloat))
+	{
+		punteroFloat = NULL;
+	}
+
+	return punteroFloat;
+}
+
+char* memoria_PrepararPunteroChar(int* punteroADimensionar, int longitudPunteroChar)
+{
+	/*
+	char* punteroChar;
+
+	printf("Antes de crear DINAMICO\n");
+	punteroChar=memoria_NewChar();
+	printf("DESPUES de crear DINAMICO\n");
+
+	if(memoria_ReSizePunteroChar(punteroADimensionar, longitudPunteroChar))
+	{
+		punteroADimensionar = NULL;
+	}
+
+	return punteroADimensionar;
+}
+*/
+
+
+
+int memoria_EliminarPosicionArrayInt(int* punteroInt, int longitudPunteroInt, int posicionAEliminar)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(punteroInt != NULL && longitudPunteroInt > 0 && posicionAEliminar > -1)
+	{
+
+	}
+
+	return retorno;
+}

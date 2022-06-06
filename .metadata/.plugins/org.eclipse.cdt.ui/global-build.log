@@ -1,4 +1,59 @@
-10:48:08 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+19:43:19 **** Incremental Build of configuration Debug for project Probar_Funciones ****
 Info: Internal Builder is used for build
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\memoriaDinamica.o" "..\\src\\memoriaDinamica.c" 
-gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+Info: Nothing to build for Probar_Funciones
+19:43:46 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Probar_Funciones.o" "..\\src\\Probar_Funciones.c" 
+..\src\Probar_Funciones.c: In function 'main':
+..\src\Probar_Funciones.c:159:2: warning: "/*" within comment [-Wcomment]
+  159 |  /*
+      |   
+..\src\Probar_Funciones.c: At top level:
+..\src\Probar_Funciones.c:435:4: warning: "/*" within comment [-Wcomment]
+  435 |   //*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
+      |     
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+19:44:07 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Probar_Funciones.o" "..\\src\\Probar_Funciones.c" 
+..\src\Probar_Funciones.c: In function 'main':
+..\src\Probar_Funciones.c:159:2: warning: "/*" within comment [-Wcomment]
+  159 |  /*
+      |   
+..\src\Probar_Funciones.c: At top level:
+..\src\Probar_Funciones.c:436:4: warning: "/*" within comment [-Wcomment]
+  436 |   //*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
+      |     
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+19:44:53 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Probar_Funciones.o" "..\\src\\Probar_Funciones.c" 
+..\src\Probar_Funciones.c: In function 'main':
+..\src\Probar_Funciones.c:159:2: warning: "/*" within comment [-Wcomment]
+  159 |  /*
+      |   
+..\src\Probar_Funciones.c: At top level:
+..\src\Probar_Funciones.c:440:4: warning: "/*" within comment [-Wcomment]
+  440 |   //*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
+      |     
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+c:/mingw/bin/../lib/gcc/mingw32/9.2.0/../../../../mingw32/bin/ld.exe: cannot open output file Probar_Funciones.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+19:44:57 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+Info: Nothing to build for Probar_Funciones
+Info: Nothing to build for Probar_Funciones
+19:50:00 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Probar_Funciones.o" "..\\src\\Probar_Funciones.c" 
+..\src\Probar_Funciones.c: In function 'main':
+..\src\Probar_Funciones.c:159:2: warning: "/*" within comment [-Wcomment]
+  159 |  /*
+      |   
+..\src\Probar_Funciones.c: At top level:
+..\src\Probar_Funciones.c:432:4: warning: "/*" within comment [-Wcomment]
+  432 |   //*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
+      |     
+gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 

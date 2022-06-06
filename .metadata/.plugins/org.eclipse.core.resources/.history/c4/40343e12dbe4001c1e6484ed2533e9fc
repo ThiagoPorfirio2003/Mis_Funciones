@@ -1,0 +1,20 @@
+/*
+ * array.c
+ *
+ *  Created on: 5 jun. 2022
+ *      Author: thiag
+ */
+
+int static swapReversa()
+{
+	int retorno;
+
+	retorno=1;
+
+	return retorno;
+}
+
+int static swapDelantero()
+{
+
+}

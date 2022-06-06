@@ -1,0 +1,26 @@
+/*
+ * array.c
+ *
+ *  Created on: 5 jun. 2022
+ *      Author: thiag
+ */
+#include <stdlib.h>
+
+int static swapReversaInt(int* punteroInt)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(punteroInt != NULL)
+	{
+
+	}
+
+	return retorno;
+}
+
+int static swapDelantero()
+{
+
+}

@@ -23,7 +23,7 @@ int pruebaGets(char* direccionCadenaCaracteres, int longitud);
 /// @param minimo: El valor minimo que puede tener el dato de tipo int
 /// @param maximo: El valor maximo que puede tener el dato de tipo int
 /// @return int: Un 0 en caso de que se cumplan todas las direcciones o 1 si no lo hace
-int utn_getIntRango(int* direccionInt, char* mensaje, char* mensajeError, int minimo, int maximo, int cantidadCifras);
+int utn_GetIntRango(int* direccionInt, char* mensaje, char* mensajeError, int minimo, int maximo, int cantidadDeCifras);
 
 /// @brief Con esta funcion se puede ingresar un dato de tipo float que este entre otros 2 datos de este tipo (Tomandolos como valores validos),
 /// ademas de mostrar un mensaje y un mensaje de error. Si el minimo y el maximo valen lo mismo entonces se tomara como unico valor correcto a
@@ -36,7 +36,7 @@ int utn_getIntRango(int* direccionInt, char* mensaje, char* mensajeError, int mi
 /// @param minimo: El valor minimo que puede tener el dato de tipo float
 /// @param maximo: El valor maximo que puede tener el dato de tipo float
 /// @return int: Un 0 en caso de que se cumplan todas las direcciones o 1 si no lo hace
-int utn_getFloatRango(float* direccionFloat, char* mensaje, char* mensajeError, float minimo, float maximo, int cantidadDeCifras);
+int utn_GetFloatRango(float* direccionFloat, char* mensaje, char* mensajeError, float minimo, float maximo, int cantidadDeCifras);
 
 /// @brief Con esta funcion se puede ingresar una cadena de caracteres que tenga determinada cantidad de caracteres, emitiendo un mensaje y uno de error,
 /// ademas de validar que no haya un espacio al inicio, pero si entre palabras, y que solo haya letras. Una vez llegada a la parte de ingreso del dato no se podra
@@ -120,6 +120,8 @@ int utn_verificarSerInt(char* cadenaDeCaracteres);
 int utn_verificarSerFloat(char* cadenaDeCaracteres);
 
 int utn_verificarSerNombre(char* cadenaDeCaracteres);
+
+int utn_UnirNombreYApellido(char* nombre, char* apellido, char* depositoDeNombreYApellido);
 
 
 #endif /* UTN_H_ */
