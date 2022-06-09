@@ -28,30 +28,38 @@
 int main(void) {
 	setbuf(stdout,NULL);
 
-	int i;
-	char uno[]="árbol";// = (char*) malloc(sizeof(char)*50);;
+	FILE* pArchivo;
 
-	char dos[]= "arbol";
+	char textoPrueba[]="Tercera Prueba";
+	char txt[]="Que onda";
+	int cantidadLetras;
+	int cantTxt;
 
-	//printf("Esta aca");
-	//numeroPrueba= memoria_NewInt();
+	cantidadLetras= strlen(textoPrueba);
+	cantTxt= strlen(txt);
 
-	utn_GetIntRango(&i, "Ingrese: ", "Error, ingrese: ", -50, 50,10);
-		/*
-	for(int i=0;i<10;i++)
+	pArchivo= fopen("pruebaBinaria.dat","wb");
+
+	if(pArchivo !=NULL)
 	{
-		if(i!=0)
+		printf("\nSe pudo abrir\n");
+		if(fwrite(textoPrueba, sizeof(char), cantidadLetras,pArchivo) == cantidadLetras)
 		{
-			numeroPrueba = memoria_ReSizeInt(numeroPrueba, i+1);
+			printf("\nSe pudo escribir\n");
 		}
-		utn_GetIntRango(numeroPrueba+i, "Ingrese: ", "Error, ingrese: ", -50, 50,10);
+		if(fwrite(txt, sizeof(char), cantTxt,pArchivo) == cantTxt)
+		{
+			printf("\nSe pudo sobreescribir\n");
+		}
+		else
+		{
+			printf("Hubo un error en la escritura");
+		}
+		if(!fclose(pArchivo))
+		{
+			printf("Se pudo cerrar");
+		}
 	}
-
-	for(int i=0;i<10;i++)
-	{
-		printf("Numero: %d\n", *(numeroPrueba+i));
-	}*/
-
 
 
 	return 0;

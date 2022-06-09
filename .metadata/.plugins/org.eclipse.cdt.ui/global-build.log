@@ -1,4 +1,6 @@
-21:32:18 **** Incremental Build of configuration Debug for project Probar_Funciones ****
+18:27:15 **** Incremental Build of configuration Debug for project Ejercicio1-3 ****
 Info: Internal Builder is used for build
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\memoriaDinamica.o" "..\\src\\memoriaDinamica.c" 
-gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Ejercicio1-3.o" "..\\src\\Ejercicio1-3.c" 
+gcc -o Ejercicio1-3.exe "src\\Ejercicio1-3.o" 
+Info: Nothing to build for Ejercicio1-3
+Info: Nothing to build for Ejercicio1-3

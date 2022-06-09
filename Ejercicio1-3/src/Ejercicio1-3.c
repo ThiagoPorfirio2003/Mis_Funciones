@@ -16,70 +16,29 @@ Ejemplo:
 5 3 1 el 3 es del medio
 
  */
-
 #include <stdio.h>
 #include <stdlib.h>
+
+struct a{
+	char nombre[10];
+	int edad;
+	};
 
 int main(void) {
 	setbuf(stdout, NULL);
 
-	int i;
-	int numero[2];
-	int numeroMedio;
 
-	for(i=0;i<3;i++)
-	{
-		printf("Ingrese un numero: ");
-		scanf("%d",&numero[i]);
-	}
 
-	if(numero[0] == numero[1] || numero[0] == numero[2] || numero[2] == numero [1])
-	{
-		printf("\nNo hay un numerio del medio");
-	}
-	else
-	{
-		if(numero[0] > numero [1] && numero[0] < numero[2])
-		{
-			numeroMedio= numero[0];
-		}
-		else
-		{
-			if(numero[0] > numero [2] && numero[0] < numero[1])
-			{
-				numeroMedio= numero[0];
-			}
-		}
-
-		if(numero[1] > numero [0] && numero[1] < numero[2])
-		{
-			numeroMedio= numero[1];
-		}
-		else
-		{
-
-			if(numero[1] > numero [2] && numero[1] < numero[0])
-			{
-				numeroMedio= numero[1];
-			}
-		}
-
-		if(numero[2] > numero [0] && numero[2] < numero[1])
-		{
-			numeroMedio= numero[2];
-		}
-		else
-		{
-
-			if(numero[2] > numero [1] && numero[2] < numero[0])
-			{
-				numeroMedio= numero[2];
-			}
-		}
-
-		printf("El numero del medio es: %d", numeroMedio);
-	}
-
+	FILE *bin;
+	struct a pers;
+	bin=fopen("bin.dat","wb");
+	printf("\nIngrese el nombre: ");
+	gets(pers.nombre);
+	printf("Ingrese la edad: ");
+	scanf("%d",&pers.edad);
+	fflush(stdin);
+	fwrite(&pers,sizeof(pers),1,bin);
+	fclose(bin);
 
 
 	return EXIT_SUCCESS;

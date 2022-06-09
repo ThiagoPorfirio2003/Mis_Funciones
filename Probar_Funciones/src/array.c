@@ -28,53 +28,97 @@ int array_SwapCambiarPosicionInt(int* punteroPrimerInt, int* punteroSegundoInt)
 	return retorno;
 }
 
-int array_MoverAdelanteUnInt(int* punteroInt)
+int array_MoverAdelanteInt(int* punteroInt, int posicionesAMover)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(punteroInt != NULL)
+	if(punteroInt != NULL && posicionesAMover>-1)
 	{
-		*(punteroInt+1) = *punteroInt;
+		*(punteroInt+posicionesAMover) = *punteroInt;
 		retorno=0;
 	}
-
 	return retorno;
 }
 
-int array_MoverAtrasUnInt(int* punteroInt)
+int array_MoverAtrasInt(int* punteroInt, int posicionesAMover)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(punteroInt !=NULL)
+	if(punteroInt !=NULL && posicionesAMover >-1)
 	{
-		*(punteroInt-1) = *punteroInt;
+		*(punteroInt-posicionesAMover) = *punteroInt;
 		retorno=0;
 	}
-
 	return retorno;
 }
-
-int array_MoverAdelanteVariosInt(int* arrayDatos, int longitudArray,int posicionEspacioALiberar, int espaciosAMoverse)
+//Se mover todos los datos que esten en frente de posicionDeInicio
+//La posicion empieza a contar desde 0
+int array_MoverAdelanteVariosInt(int posicionDeInicio, int posicionFinal,int posicionesAMover, int* arrayDatos, int longitudArray)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(arrayDatos!=NULL && posicionEspacioALiberar>-1 && espaciosAMoverse > 0 && longitudArray>0)
+	if(arrayDatos!=NULL && posicionDeInicio>-1 && posicionFinal>posicionDeInicio && posicionesAMover > -1 && longitudArray>0)
 	{
-		for(int i=longitudArray-1; i>posicionEspacioALiberar;i--)
+		posicionDeInicio--;
+		longitudArray--;
+		for(int i=longitudArray; i>posicionDeInicio;i--)
 		{
-			for(int j=0; j<espaciosAMoverse;j++)
+			for(int j=0; j<longitudArray;j++)
 			{
 
 			}
 		}
 	}
 
+	return retorno;
+}
+
+int array_MoverAtrasVariosInt(int posicionDelDatoInicio, int posicionDelDatoFinal,int posicionesAMover, int* arrayDatos)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(arrayDatos!=NULL && posicionDelDatoInicio>-1 && posicionDelDatoFinal>posicionDelDatoInicio && posicionesAMover > -1)
+	{
+		retorno=0;
+		posicionDelDatoFinal++;
+		for(int i=posicionDelDatoInicio; i<posicionDelDatoFinal;i++)
+		{
+			if(array_MoverAtrasInt(i+arrayDatos, posicionesAMover))
+			{
+				retorno=1;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+
+
+int array_existeDatoInt(int* arrayDatos, int cantidadDatos,int datoAEcontrar)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(arrayDatos!=NULL && cantidadDatos>0)
+	{
+		for(int i=0; i<cantidadDatos;i++)
+		{
+			if(*(arrayDatos+i)== datoAEcontrar)
+			{
+				retorno=0;
+				break;
+			}
+		}
+	}
 	return retorno;
 }
 
@@ -318,25 +362,5 @@ int array_CompararCadenaCaracteresEspanolInles(char* primeraCadena, char* segund
 		}
 	}
 
-	return retorno;
-}
-
-int array_existeDatoInt(int* arrayDatos, int cantidadDatos,int datoAEcontrar)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(arrayDatos!=NULL && cantidadDatos>0)
-	{
-		for(int i=0; i<cantidadDatos;i++)
-		{
-			if(*(arrayDatos+i)== datoAEcontrar)
-			{
-				retorno=0;
-				break;
-			}
-		}
-	}
 	return retorno;
 }
