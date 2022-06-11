@@ -53,7 +53,7 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 			}
 		}
 	}
-	//printf("\n\nCANTIDAD LIKEND %d\n\n",ll_len(pArrayListPassenger));
+	printf("\n\nCANTIDAD LIKEND %d\n\n",ll_len(pArrayListPassenger));
     return retorno;
 }
 

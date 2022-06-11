@@ -495,3 +495,84 @@ int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar)
 	}
     return retorno;
 }
+
+int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
+{
+	int retorno;
+	int cantidadPasajerosAGuardar;
+	int idAGuardar;
+	char nombreAGuardar[CANTIDAD_CARACTERES_NOMBRE];
+	char apellidoAGuardar[CANTIDAD_CARACTERES_APELLIDO];
+	char codigoVueloAGuardar[CARACTERES_TOTALES_CODIGOVUELO];
+	int tipoPasajero;
+	float precioAGuardar;
+	int estadoVueloNumero;
+	char estadoVueloAGuardar[CARACTERES_ESTADO_VUELO_PALABRA];
+	char tipoPasajeroAGuardar[CARACTERES_TIPO_PASAJERO_PALABRA];
+
+	Passenger* pPasajeroAGuardar;
+
+	retorno=-1;
+
+	if(pFile != NULL && pArrayListPassenger != NULL)
+	{
+		retorno=0;
+		if((cantidadPasajerosAGuardar = ll_len(pArrayListPassenger) != -1))
+		{
+			printf("\n\ntamanio link: %d\n\n", cantidadPasajerosAGuardar);
+			//fscanf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
+			fprintf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
+			for(int i=0; i<cantidadPasajerosAGuardar;i++)
+			{
+				if((pPasajeroAGuardar= Passenger_new()) != NULL && (pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i)) != NULL &&
+						!Passenger_getId(pPasajeroAGuardar, &idAGuardar) &&
+						!Passenger_getNombre(pPasajeroAGuardar, nombreAGuardar) &&
+						!Passenger_getApellido(pPasajeroAGuardar, apellidoAGuardar) &&
+						!Passenger_getCodigoVuelo(pPasajeroAGuardar, codigoVueloAGuardar) &&
+						!Passenger_getTipoPasajero(pPasajeroAGuardar, &tipoPasajero)&&
+						!Passenger_getPrecio(pPasajeroAGuardar, &precioAGuardar)  &&
+						!Passenger_getEstadoVuelo(pPasajeroAGuardar, &estadoVueloNumero))
+				{
+					switch(estadoVueloNumero)
+					{
+						case 1:
+							strcpy(estadoVueloAGuardar, "Aterrizado");
+							break;
+
+						case 2:
+							strcpy(estadoVueloAGuardar, "En horario");
+							break;
+
+						case 3:
+							strcpy(estadoVueloAGuardar, "Demorado");
+							break;
+
+						case 4:
+							strcpy(estadoVueloAGuardar, "En vuelo");
+							break;
+					}
+
+					switch(tipoPasajero)
+					{
+						case 1:
+							strcpy(tipoPasajeroAGuardar, "First Class");
+							break;
+
+						case 2:
+							strcpy(tipoPasajeroAGuardar, "Executive Class");
+							break;
+
+						case 3:
+							strcpy(tipoPasajeroAGuardar, "EconomyClass");
+					}
+					if(fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n", idAGuardar, nombreAGuardar, apellidoAGuardar, precioAGuardar, codigoVueloAGuardar, tipoPasajeroAGuardar, estadoVueloAGuardar) < 0)
+					{
+						retorno++;
+					}
+					Passenger_MostrarUnPasajero(pPasajeroAGuardar);
+				}
+			}
+		}
+	}
+	return retorno;
+}

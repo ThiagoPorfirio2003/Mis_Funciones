@@ -52,4 +52,6 @@ int Passenger_verificarSerCodigoDeVuelo(char* cadenaAlfanumerica);
 
 int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar);
 
+int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger);
+
 #endif /* PASSENGER_H_ */

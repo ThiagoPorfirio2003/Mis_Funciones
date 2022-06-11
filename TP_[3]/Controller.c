@@ -108,12 +108,12 @@ int controller_addPassenger(LinkedList* pArrayListPassenger, int *contadorId)
 
 		if(!Passenger_loadOnePassengerData(contadorId, nombre, apellido, &precio, &tipoPasajero, codigoVuelo, &statusFlight))
 		{
-			(*contadorId)++;
 			utn_trasnformarCadenaAMayuscula(codigoVuelo);
 			nuevoPasajero = Passenger_newParametros(contadorId, nombre, apellido, &precio, &tipoPasajero, codigoVuelo, &statusFlight);
 			if(!ll_add(pArrayListPassenger, nuevoPasajero))
 			{
 				retorno=0;
+				(*contadorId)++;
 			}
 		}
 
@@ -287,38 +287,7 @@ int controller_sortPassenger(LinkedList* pArrayListPassenger)
 {
     return 1;
 }
-/*
-int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
-{
-	int retorno;
-	int cantidadPasajerosAGuardar;
-	int idAGuardar;
-	char* nombreAGuardar;
-	char* apellidoAGuardar;
 
-
-	Passenger* pPasajeroAGuardar;
-
-	retorno=1;
-
-	if(pFile != NULL && pArrayListPassengerNULL)
-	{
-		if((cantidadPasajerosAGuardar = ll_len(pArrayListPassenger)) != NULL)
-		{
-			for(int i=0; i<cantidadPasajerosAGuardar;i++)
-			{
-				if((pPasajeroAGuardar= Passenger_new()) != NULL && (pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i)) != NULL)
-				{
-
-				}
-			}
-		}
-
-	}
-
-	return retorno;
-}
-*/
 
 /** \brief Guarda los datos de los pasajeros en el archivo data.csv (modo texto).
  *
@@ -337,7 +306,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 	if(path != NULL && pArrayListPassenger != NULL)
 	{
 		pArchivo=fopen(path,"w");
-		if(!parser_PassengerFromText(pArchivo, pArrayListPassenger))
+		if(!Passenger_saveAsText(pArchivo, pArrayListPassenger))
 		{
 			retorno=0;
 		}
