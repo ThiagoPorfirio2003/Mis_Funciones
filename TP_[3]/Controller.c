@@ -13,21 +13,21 @@
 #define CANTIDAD_CARACTERES_APELLIDO 50
 #define VUELO_PRECIO_MINIMO 10000
 #define VUELO_PRECIO_MAXIMO 100000000
-#define CANTIDAD_CIFRAS_PRECIO 20
+#define CANTIDAD_CIFRAS_PRECIO 30
 #define TIPO_PASAJERO_OPCION_MINIMA 1
 #define TIPO_PASAJERO_OPCION_MAXIMA 4
 #define TIPO_VUELO_OPCION_MINIMA 1
 #define TIPO_VUELO_OPCION_MAXIMA 4
-#define CANTIDAD_MAXIMA_CIFRAS_ID 10
+#define CANTIDAD_MAXIMA_CIFRAS_ID 20
 #define CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO 7
 #define CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO 7
 #define CARACTERES_TOTALES_CODIGOVUELO 9
-#define CARACTERES_MARCO_CODIGOVUELO 10
+#define CARACTERES_MARCO_CODIGOVUELO 15
 #define CARACTERES_CODIGOVUELO 8
 #define CARACTERES_TIPO_PASAJERO_PALABRA 20
 #define CARACTERES_ESTADO_VUELO_PALABRA 20
 #define MINIMA_OPCION_MODIFICAR_PASAJERO 1
-#define MAXIMA_OPCION_MODIFICAR_PASAJERO 5
+#define MAXIMA_OPCION_MODIFICAR_PASAJERO 6
 
 
 
@@ -49,18 +49,18 @@ int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
 	if(path != NULL && pArrayListPassenger != NULL)
 	{
 		pArchivo=fopen(path,"r");
+		printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+		printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
+		printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		if(!parser_PassengerFromText(pArchivo, pArrayListPassenger))
 		{
 			retorno=0;
-		}
-		else
-		{
-			retorno=1;
 		}
 		while(!fclose(pArchivo))
 		{
 
 		}
+		printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
 	}
 	return retorno;
 }
@@ -89,55 +89,70 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListPassenger)
  * \return int
  *
  */
-int controller_addPassenger(LinkedList* pArrayListPassenger, int *contadorId)
+int controller_addPassenger(LinkedList* pArrayListPassenger, int *idNumerico)
 {
 	Passenger* nuevoPasajero;
 
 	int retorno;
-	char nombre[50];
-	char apellido[50];
-	float precio;
-	int tipoPasajero;
-	char codigoVuelo[8];
-	int statusFlight;
+	char nombre[CANTIDAD_CARACTERES_NOMBRE];
+	char apellido[CANTIDAD_CARACTERES_APELLIDO];
+	float precioNumerico;
+	int tipoPasajeroNumerico;
+	char codigoVuelo[CARACTERES_CODIGOVUELO];
+	int estadoVueloNumerico;
+
+	char estadoVueloString[CARACTERES_CODIGOVUELO];
+	char precioString[CANTIDAD_CIFRAS_PRECIO];
+	char tipoPasajeroString[CARACTERES_TIPO_PASAJERO_PALABRA];
+	char idString[CANTIDAD_MAXIMA_CIFRAS_ID+1];
 
 	retorno=1;
 
-	if(pArrayListPassenger != NULL && contadorId != NULL)
+	if(pArrayListPassenger != NULL && idNumerico != NULL)
 	{
-
-		if(!Passenger_loadOnePassengerData(contadorId, nombre, apellido, &precio, &tipoPasajero, codigoVuelo, &statusFlight))
+		if(!Passenger_askOnePassengerData(nombre, apellido, &precioNumerico, &tipoPasajeroNumerico, codigoVuelo, &estadoVueloNumerico))
 		{
-			utn_trasnformarCadenaAMayuscula(codigoVuelo);
-			nuevoPasajero = Passenger_newParametros(contadorId, nombre, apellido, &precio, &tipoPasajero, codigoVuelo, &statusFlight);
-			if(!ll_add(pArrayListPassenger, nuevoPasajero))
+			if(!Passenger_transformarIDaString(idString, *idNumerico) &&
+					!Passenger_transformarPrecioaString(precioString, precioNumerico) &&
+					!Passenger_verificarYTransfomarTipoPasajeroIntAString(tipoPasajeroString, tipoPasajeroNumerico) &&
+					!Passenger_verificarYTransfomarEstadoVueloIntAString(estadoVueloString,estadoVueloNumerico)
+					)
 			{
-				retorno=0;
-				(*contadorId)++;
+				nuevoPasajero = Passenger_newParametros(idString, nombre, apellido, precioString, tipoPasajeroString, codigoVuelo, estadoVueloString);
+				if(nuevoPasajero !=NULL && !ll_add(pArrayListPassenger, nuevoPasajero))
+				{
+					retorno=0;
+					(*idNumerico)++;
+				}
 			}
 		}
-
 	}
 
     return retorno;
 }
 
-int controller_findPassengerById(int idAEncontrar, int cantidadPasajeros, LinkedList* pArrayListPassenger)
+int controller_findPassengerById(LinkedList* pArrayListPassenger, int idAEncontrar)
 {
 	int retorno;
 	int idAuxiliar;
+	int cantidadPasajeros;
 
 	Passenger* pasajeroBusqueda;
 
 	retorno=-1;
 
-	for(int i=0;i<cantidadPasajeros;i++)
+	cantidadPasajeros = ll_len(pArrayListPassenger);
+
+	if(cantidadPasajeros != -1)
 	{
-		if((pasajeroBusqueda = (Passenger*) ll_get(pArrayListPassenger, i)) != NULL && !Passenger_getId(pasajeroBusqueda ,&idAuxiliar) &&
-				idAuxiliar == idAEncontrar)
+		for(int i=0;i<cantidadPasajeros;i++)
 		{
-			retorno=i;
-			break;
+			if((pasajeroBusqueda = (Passenger*) ll_get(pArrayListPassenger, i)) != NULL && !Passenger_getId(pasajeroBusqueda ,&idAuxiliar) &&
+					idAuxiliar == idAEncontrar)
+			{
+				retorno=i;
+				break;
+			}
 		}
 	}
 
@@ -156,65 +171,79 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 	Passenger* pasajeroAMoidificar;
 
 	int retorno;
-	int id;
-	int cantidadPasajeros;
+	int idAEncontrar;
 	int posicionPasajero;
-
 	int opcionModificacion;
-	char nombre[50];
-	char apellido[50];
-	float precio;
-	int tipoPasajero;
-	char codigoVuelo[8];
 
 	retorno=1;
 
-	if(pArrayListPassenger != NULL && !utn_GetIntRango(&id, "\nIngrese el id del pasajero cuyos datos desea modificar: ", "Dato invalido. Ingrese el id del pasajero cuyos datos desea modificar: ", 0, 2000, 30) &&
-			(cantidadPasajeros= ll_len(pArrayListPassenger)) != -1 && (posicionPasajero=controller_findPassengerById(id, cantidadPasajeros, pArrayListPassenger)) != -1)
+	if(pArrayListPassenger != NULL && !utn_GetIntRango(&idAEncontrar, "\nIngrese el id del pasajero cuyos datos desea modificar: ", "Dato invalido. Ingrese el id del pasajero cuyos datos desea modificar: ", 0, 2000, 30))
 	{
+		posicionPasajero = controller_findPassengerById(pArrayListPassenger, idAEncontrar);
 
-		if((pasajeroAMoidificar = (Passenger*) ll_get(pArrayListPassenger, posicionPasajero)) != NULL)
+		if(posicionPasajero != -1)
 		{
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-			printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-			Passenger_MostrarUnPasajero(pasajeroAMoidificar);
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-			if(!utn_GetIntRango(&opcionModificacion, "\nCaracteristicas a modificar:\n 1- Nombre\n 2- Apellido\n 3- Precio\n 4- Tipo de Pasajero \n 5- Codigo de vuelo\nIngrese el numero del aspecto a modificar:  ", "Ingrese el numero del aspecto a modificar: ", MINIMA_OPCION_MODIFICAR_PASAJERO, MAXIMA_OPCION_MODIFICAR_PASAJERO, 3))
+			pasajeroAMoidificar = (Passenger*) ll_get(pArrayListPassenger, posicionPasajero);
+
+			if(pasajeroAMoidificar != NULL)
 			{
-				switch(opcionModificacion)
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				Passenger_MostrarUnPasajero(pasajeroAMoidificar);
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				if(!utn_GetIntRango(&opcionModificacion, "\nCaracteristicas a modificar:\n 1- Nombre\n 2- Apellido\n 3- Precio\n 4- Tipo de Pasajero \n 5- Codigo de vuelo\n 6- Estado de vuelo\nIngrese el numero del aspecto a modificar:  ", "Ingrese el numero del aspecto a modificar: ", MINIMA_OPCION_MODIFICAR_PASAJERO, MAXIMA_OPCION_MODIFICAR_PASAJERO, 3))
 				{
-					case 1:
-						utn_GetNombreRango(nombre, "\nIngrese el nuevo nombre del pasajero: ", "Dato invalido. Ingrese el nuevo NOMBRE del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE);
-						Passenger_setNombre(pasajeroAMoidificar, nombre);
-						break;
+					switch(opcionModificacion)
+					{
+						case 1:
+							if(Passenger_modificarNombre(pasajeroAMoidificar, "\nIngrese el nuevo nombre del pasajero: ", "Dato invalido. Ingrese el nuevo NOMBRE del pasajero: ", "\n\nNo se puede realizar la operacion debido a que ya no hay memoria\n\n"))
+							{
+								retorno=1;
+							}
+							break;
 
-					case 2:
-						utn_GetNombreRango(apellido, "\nIngrese el nuevo apellido del pasajero: ", "Dato invalido. Ingrese el nuevo APELLIDO del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE);
-						Passenger_setApellido(pasajeroAMoidificar, apellido);
-						break;
+						case 2:
+							if(Passenger_ModificarApellido(pasajeroAMoidificar, "\nIngrese el nuevo apellido del pasajero: ", "Dato invalido. Ingrese el nuevo APELLIDO del pasajero: ", "\n\nNo se puede realizar la operacion debido a que ya no hay memoria\n\n"))
+							{
+								retorno=1;
+							}
+							break;
 
-					case 3:
-						utn_GetFloatRango(&precio, "\nIngresa el nuevo precio del vuelo, debe estar entre $10000 y $100000000: ", "El dato ingresado es invalido. Ingresa el nuevo precio del vuelo, debe estar entre $10000 y $100000000:", VUELO_PRECIO_MINIMO, VUELO_PRECIO_MAXIMO, CANTIDAD_CIFRAS_PRECIO);
-						Passenger_setPrecio(pasajeroAMoidificar, precio);
-						break;
+						case 3:
+							if(Passenger_ModificarPrecioVuelo(pasajeroAMoidificar, "\nIngresa el nuevo precio del vuelo, debe estar entre $10000 y $100000000: ", "El dato ingresado es invalido. Ingresa el nuevo precio del vuelo, debe estar entre $10000 y $100000000: "))
+							{
+								retorno=1;
+							}
+							break;
 
-					case 4:
-						utn_GetIntRango(&tipoPasajero, "\nTipo de pasajero:\n 1. FirstClass  \n 2. ExecutiveClass\n 3. EconomyClass\nIngrese el numero correspondiente al tipo: ", "Dato invalido. Ingrese el numero correspondiente al tipo: ", TIPO_PASAJERO_OPCION_MINIMA, TIPO_PASAJERO_OPCION_MAXIMA, 5);
-						Passenger_setTipoPasajero(pasajeroAMoidificar, tipoPasajero);
-						break;
+						case 4:
+							if(!Passenger_ModificarTipoPasajero(pasajeroAMoidificar, "\nTipo de pasajero:\n 1. FirstClass  \n 2. ExecutiveClass\n 3. EconomyClass\nIngrese el numero correspondiente al tipo: ", "Dato invalido. Ingrese el numero correspondiente al tipo: "))
+							{
+								retorno=1;
+							}
+							break;
 
-					case 5:
-						while(utn_GetCadenaAlfanumericaRango(codigoVuelo, "Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\nNo se puede realizar la operacion debido a que ya no hay memoria\n", CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9) ||
-						Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
-						{
-							printf("\nCodigo de vuelo incorrecto\n");
-						}
-						utn_trasnformarCadenaAMayuscula(codigoVuelo);
-						Passenger_setCodigoVuelo(pasajeroAMoidificar, codigoVuelo);
-						break;
+						case 5:
+							if(!Passenger_ModificarCodigoVuelo(pasajeroAMoidificar, "\nTeniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\n\nNo se puede realizar la operacion debido a que ya no hay memoria\n\n", "\nEl codigo escrito no cumple con las condiciones\n"))
+							{
+								retorno=1;
+							}
+							break;
+
+						case 6:
+							if(Passenger_ModificarEstadoVuelo(pasajeroAMoidificar, "\nEstado de vuelo:\n 1. Aterrizado\n 2. En horario\n 3. Demorado\n 4. En vuelo \nIngrese el numero que corresponda: ", "Dato ingresado invalido. Ingrese el numero que corresponda: "))
+							{
+								retorno=1;
+							}
+							break;
+
+						default:
+							retorno=1;
+							break;
+					}
+					retorno=0;
 				}
-				retorno=0;
 			}
 		}
 	}
@@ -231,7 +260,23 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
  */
 int controller_removePassenger(LinkedList* pArrayListPassenger)
 {
-    return 1;
+    int retorno;
+    int posicionPasajeroAEliminar;
+    int idAEncontrar;
+
+    retorno=1;
+
+	if(pArrayListPassenger != NULL && !utn_GetIntRango(&idAEncontrar, "\nIngrese el id del pasajero cuyos datos desea modificar: ", "Dato invalido. Ingrese el id del pasajero cuyos datos desea modificar: ", 0, 2000, 30))
+    {
+    	posicionPasajeroAEliminar = controller_findPassengerById(pArrayListPassenger, idAEncontrar);
+
+    	if(posicionPasajeroAEliminar != -1 && !ll_remove(pArrayListPassenger,posicionPasajeroAEliminar))
+    	{
+    		retorno=0;
+    	}
+    }
+
+    return retorno;
 }
 
 /** \brief Listar pasajeros
@@ -241,7 +286,7 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
  * \return int
  *
  */
-int controller_ListPassenger(LinkedList* pArrayListPassenger, char* mensajeDeError)
+int controller_ListPassenger(LinkedList* pArrayListPassenger)
 {
 	int retorno;
 	int cantidadPasajeros;
@@ -249,26 +294,25 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger, char* mensajeDeErr
 
 	retorno=1;
 
-	if(pArrayListPassenger != NULL && mensajeDeError != NULL)
+	if(pArrayListPassenger != NULL)
 	{
 		retorno=0;
 		cantidadPasajeros = ll_len(pArrayListPassenger);
 		if(cantidadPasajeros != -1)
 		{
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+			printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 			printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+			printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 			for(int i=0;i<cantidadPasajeros;i++)
 			{
 				pPasajeroAMostrar = (Passenger*) ll_get(pArrayListPassenger, i);
 				if(pPasajeroAMostrar == NULL || Passenger_MostrarUnPasajero(pPasajeroAMostrar))
 				{
 					retorno=1;
-					printf(mensajeDeError);
 					break;
 				}
 			}
-			printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+			printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		}
 	}
 
@@ -306,6 +350,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 	if(path != NULL && pArrayListPassenger != NULL)
 	{
 		pArchivo=fopen(path,"w");
+
 		if(!Passenger_saveAsText(pArchivo, pArrayListPassenger))
 		{
 			retorno=0;

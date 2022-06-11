@@ -27,6 +27,8 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 	char codigoVuelo[8];
 	char statusFlightCaracter[30];
 
+	int contadorTOTAL=0;
+
 	Passenger* nuevoPasajero;
 
 	retorno=1;
@@ -39,7 +41,10 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 			if((nuevoPasajero = Passenger_newParametros(idCaracter, nombre, apellido, precioCaracter, tipoPasajeroCaracter, codigoVuelo, statusFlightCaracter)) != NULL &&
 					!ll_add(pArrayListPassenger, nuevoPasajero))
 			{
-				Passenger_MostrarUnPasajero(nuevoPasajero);
+				if(!Passenger_MostrarUnPasajero(nuevoPasajero))
+				{
+					contadorTOTAL++;
+				}
 			}
 			else
 			{
@@ -53,7 +58,7 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 			}
 		}
 	}
-	printf("\n\nCANTIDAD LIKEND %d\n\n",ll_len(pArrayListPassenger));
+
     return retorno;
 }
 

@@ -35,7 +35,7 @@ int utn_verificarSerInt(char* cadenaDeCaracteres)
 	int retorno;
 	retorno = 1;
 
-	if(cadenaDeCaracteres != NULL && *cadenaDeCaracteres != '0')
+	if(cadenaDeCaracteres != NULL)
 	{
 		retorno=0;
 
@@ -95,7 +95,6 @@ int utn_verificarSerFloat(char* cadenaDeCaracteres)
 			}
 			cadenaDeCaracteres++;
 		}while(*cadenaDeCaracteres!= '\0');
-
 	}
 	return retorno;
 }
@@ -212,27 +211,7 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 	}
 	return retorno;
 }
-/*
-{
-	int retorno;
 
-	retorno=1;
-
-	if(cadenaDeCaracteres != NULL && *cadenaDeCaracteres !=' ')
-	{
-		retorno =0;
-
-		do{
-			if(utn_VerificarSerLetra(cadenaDeCaracteres) && utn_VerificarSerLetra_ASCII_EXTEND(cadenaDeCaracteres))
-			{
-				retorno=1;
-				break;
-			}
-			cadenaDeCaracteres++;
-		}while(*cadenaDeCaracteres != '\0');
-	}
-	return retorno;
-}*/
 
 int utn_verificarSerCadenaAlfanumerica(char* cadenaCaracteres)
 {

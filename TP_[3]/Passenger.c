@@ -12,106 +12,88 @@
 #define CANTIDAD_CARACTERES_APELLIDO 50
 #define VUELO_PRECIO_MINIMO 10000
 #define VUELO_PRECIO_MAXIMO 100000000
-#define CANTIDAD_CIFRAS_PRECIO 20
+#define CANTIDAD_CIFRAS_PRECIO 30
 #define TIPO_PASAJERO_OPCION_MINIMA 1
-#define TIPO_PASAJERO_OPCION_MAXIMA 4
-#define TIPO_VUELO_OPCION_MINIMA 1
-#define TIPO_VUELO_OPCION_MAXIMA 4
-#define CANTIDAD_MAXIMA_CIFRAS_ID 10
+#define TIPO_PASAJERO_OPCION_MAXIMA 3
+#define ESTADO_VUELO_OPCION_MINIMA 1
+#define ESTADO_VUELO_OPCION_MAXIMA 4
+#define CANTIDAD_MAXIMA_CIFRAS_ID 20
 #define CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO 7
 #define CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO 7
 #define CARACTERES_TOTALES_CODIGOVUELO 9
-#define CARACTERES_MARCO_CODIGOVUELO 10
-#define CARACTERES_CODIGOVUELO 8
+#define CARACTERES_MARCO_CODIGOVUELO 15
+#define CARACTERES_CODIGOVUELO 10
 #define CARACTERES_TIPO_PASAJERO_PALABRA 20
 #define CARACTERES_ESTADO_VUELO_PALABRA 20
 #define MINIMA_OPCION_MODIFICAR_PASAJERO 1
 #define MAXIMA_OPCION_MODIFICAR_PASAJERO 5
 
-Passenger* Passenger_new()
+int Passenger_verificarYTransfomarEstadoVueloStringAInt(char* estadoVueloString, int* estadoVueloNumero)
 {
-	Passenger* nuevoPasajero;
-
-	nuevoPasajero = NULL;
-	nuevoPasajero = (Passenger*) malloc(sizeof(Passenger));
-	if(nuevoPasajero != NULL)
-	{
-		Passenger_setId(nuevoPasajero, 0);
-		Passenger_setNombre(nuevoPasajero,"");
-		Passenger_setApellido(nuevoPasajero,"");
-		Passenger_setCodigoVuelo(nuevoPasajero,"");
-		Passenger_setTipoPasajero(nuevoPasajero,0);
-		Passenger_setPrecio(nuevoPasajero,0);
-		Passenger_setEstadoVuelo(nuevoPasajero,0);
-	}
-	return nuevoPasajero;
-}
-
-Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoStr, char* precioStr, char* tipoPasajeroStr, char* codigoVueloStr, char* statusFlight)
-{
-	Passenger* nuevoPasajero;
-	int statusFlightNumero;
-	int tipoPasajeroNumero;
-	int idNumero;
-	float precioNumero;
 	int retorno;
 
-	nuevoPasajero = Passenger_new();
+	retorno=1;
 
-	if(nuevoPasajero != NULL && idStr != NULL && nombreStr != NULL && apellidoStr != NULL && precioStr != NULL &&
-			tipoPasajeroStr != NULL && codigoVueloStr != NULL && statusFlight != NULL &&
-			!utn_verificarSerInt(idStr) && (idNumero = atoi(idStr)) >0 &&
-			!utn_verificarSerNombre(nombreStr) && !utn_verificarSerNombre(apellidoStr) &&
-			!utn_verificarSerFloat(precioStr) && (precioNumero = atof(precioStr)) >= VUELO_PRECIO_MINIMO &&
-			!Passenger_verificarSerCodigoDeVuelo(codigoVueloStr))
+	if(estadoVueloString != NULL && estadoVueloNumero != NULL)
 	{
 		retorno=0;
-		if(!strcmp(statusFlight, "Aterrizado"))
+		if(!strcmp(estadoVueloString, "Aterrizado"))
 		{
-			statusFlightNumero=1;
+			*estadoVueloNumero=1;
 		}
 		else
 		{
-			if(!strcmp(statusFlight, "En Horario"))
+			if(!strcmp(estadoVueloString, "En Horario"))
 			{
-				statusFlightNumero=2;
+				*estadoVueloNumero=2;
 			}
 			else
 			{
-				if(!strcmp(statusFlight, "Demorado"))
+				if(!strcmp(estadoVueloString, "Demorado"))
 				{
-					statusFlightNumero=3;
+					*estadoVueloNumero=3;
 				}
 				else
 				{
-					if(!strcmp(statusFlight, "En Vuelo"))
+					if(!strcmp(estadoVueloString, "En Vuelo"))
 					{
-						statusFlightNumero=4;
+						*estadoVueloNumero=4;
 					}
 					else
 					{
 						retorno=1;
 					}
-
 				}
 			}
 		}
+	}
+	return retorno;
+}
 
-		if(!strcmp(tipoPasajeroStr, "FirstClass"))
+int Passenger_verificarYTransfomarTipoPasajeroStringAInt(char* tipoPasajeroString, int* tipoPasajeroNumero)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(tipoPasajeroString != NULL && tipoPasajeroNumero != NULL)
+	{
+		retorno=0;
+		if(!strcmp(tipoPasajeroString, "FirstClass"))
 		{
-			tipoPasajeroNumero=1;
+			*tipoPasajeroNumero=1;
 		}
 		else
 		{
-			if(!strcmp(tipoPasajeroStr, "ExecutiveClass"))
+			if(!strcmp(tipoPasajeroString, "ExecutiveClass"))
 			{
-				tipoPasajeroNumero=2;
+				*tipoPasajeroNumero=2;
 			}
 			else
 			{
-				if(!strcmp(tipoPasajeroStr, "EconomyClass"))
+				if(!strcmp(tipoPasajeroString, "EconomyClass"))
 				{
-					tipoPasajeroNumero=3;
+					*tipoPasajeroNumero=3;
 				}
 				else
 				{
@@ -119,265 +101,104 @@ Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoSt
 				}
 			}
 		}
-
 	}
-	if(!retorno)
-	{
-		Passenger_setId(nuevoPasajero, idNumero);
-		Passenger_setNombre(nuevoPasajero, nombreStr);
-		Passenger_setApellido(nuevoPasajero, apellidoStr);
-		Passenger_setCodigoVuelo(nuevoPasajero, codigoVueloStr);
-		Passenger_setTipoPasajero(nuevoPasajero, tipoPasajeroNumero);
-		Passenger_setPrecio(nuevoPasajero, precioNumero);
-		Passenger_setEstadoVuelo(nuevoPasajero, statusFlightNumero);
-	}
-	else
-	{
-		free(nuevoPasajero);
-	}
-
-	return nuevoPasajero;
-}
-
-
-int Passenger_setId(Passenger* this,int id)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL)
-	{
-		this->id = id;
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-int Passenger_getId(Passenger* this,int* id)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && id != NULL)
-	{
-		*id = this->id;
-		retorno=0;
-	}
-
 	return retorno;
 }
 
 
-int Passenger_setNombre(Passenger* this,char* nombre)
+int Passenger_verificarYTransfomarEstadoVueloIntAString(char* estadoVueloString, int estadoVueloNumero)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(this != NULL && nombre != NULL /*&& !utn_verificarSerNombre(nombre)*/)
+	if(estadoVueloString != NULL)
 	{
-		strcpy(this->nombre, nombre);
-//		printf("\nnomnre : %s\n", nombre);
-	//	printf("nombre Flecha : %s\n\n", this->nombre);
 		retorno=0;
-	}
+		switch(estadoVueloNumero)
+		{
+			case 1:
+				strcpy(estadoVueloString, "Aterrizado");
+				break;
 
+			case 2:
+				strcpy(estadoVueloString, "En Horario");
+				break;
+
+			case 3:
+				strcpy(estadoVueloString, "Demorado");
+				break;
+
+			case 4:
+				strcpy(estadoVueloString, "En Vuelo");
+				break;
+
+			default:
+				retorno=1;
+				break;
+		}
+	}
 	return retorno;
 }
 
-int Passenger_getNombre(Passenger* this,char* nombre)
+int Passenger_verificarYTransfomarTipoPasajeroIntAString(char* tipoPasajeroString, int tipoPasajeroNumero)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(this != NULL && nombre != NULL /*&& !utn_verificarSerNombre(nombre)*/)
+	if(tipoPasajeroString != NULL)
 	{
-		strcpy(nombre, this->nombre);
-	//	printf("\n\nomnre get: %s\n", nombre);
-		//printf("nombre Flecha get: %s\n\n", this->nombre);
 		retorno=0;
+		switch(tipoPasajeroNumero)
+		{
+			case 1:
+				strcpy(tipoPasajeroString, "FirstClass");
+				break;
+
+			case 2:
+				strcpy(tipoPasajeroString, "ExecutiveClass");
+				break;
+
+			case 3:
+				strcpy(tipoPasajeroString, "EconomyClass");
+				break;
+
+			default:
+				retorno=1;
+				break;
+		}
 	}
-
-	return retorno;
-}
-
-
-int Passenger_setApellido(Passenger* this,char* apellido)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && apellido != NULL /*&& !utn_verificarSerNombre(apellido)*/)
-	{
-		strcpy(this->apellido, apellido);
-	//	printf("\n\nAPELLIDO: %s\n", apellido);
-		//printf("APELLIDO Flecha: %s\n\n", this->apellido);
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-int Passenger_getApellido(Passenger* this,char* apellido)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && apellido != NULL /* && !utn_verificarSerNombre(apellido)*/)
-	{
-		strcpy(apellido, this->apellido);
-	//	printf("\n\nAPELLIDO GET: %s\n", apellido);
-		//printf("APELLIDO Flecha GET: %s\n\n", this->apellido);
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-
-int Passenger_setCodigoVuelo(Passenger* this,char* codigoVuelo)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && codigoVuelo != NULL /*&& !controller_verificarSerCodigoDeVuelo(codigoVuelo)*/)
-	{
-		strcpy(this->codigoVuelo, codigoVuelo);
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-int Passenger_getCodigoVuelo(Passenger* this,char* codigoVuelo)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && codigoVuelo != NULL /*&& !controller_verificarSerCodigoDeVuelo(codigoVuelo)*/)
-	{
-		strcpy(codigoVuelo, this->codigoVuelo);
-		retorno=0;
-	}
-
 	return retorno;
 }
 
 
-int Passenger_setTipoPasajero(Passenger* this,int tipoPasajero)
+int Passenger_transformarIDaString(char* idString, int idNumero)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(this != NULL /* && (tipoPasajero>1 || tipoPasajero<3)*/)
+	if(idString != NULL)
 	{
-		this->tipoPasajero = tipoPasajero;
+		sprintf(idString,"%d", idNumero);
 		retorno=0;
 	}
 	return retorno;
 }
 
-int Passenger_getTipoPasajero(Passenger* this,int* tipoPasajero)
+int Passenger_transformarPrecioaString(char* precioString, float precioNumero)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(this != NULL && tipoPasajero != NULL)
+	if(precioString != NULL)
 	{
-		*tipoPasajero = this->tipoPasajero;
+		sprintf(precioString,"%.2f", precioNumero);
 		retorno=0;
 	}
 
-	return retorno;
-}
-
-
-int Passenger_setPrecio(Passenger* this,float precio)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL /*&& precio>0*/)
-	{
-		this->precio = precio;
-		retorno=0;
-	}
-	return retorno;
-}
-
-int Passenger_getPrecio(Passenger* this,float* precio)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && precio != NULL)
-	{
-		*precio = this->precio;
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-
-int Passenger_setEstadoVuelo(Passenger* this,int estadoDeVuelo)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL /*&& (estadoDeVuelo>1 || estadoDeVuelo<3)*/)
-	{
-		this->statusFlight = estadoDeVuelo;
-		retorno=0;
-	}
-	return retorno;
-}
-
-int Passenger_getEstadoVuelo(Passenger* this,int* estadoDeVuelo)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(this != NULL && estadoDeVuelo != NULL /*&& (estadoDeVuelo>1 || estadoDeVuelo<3)*/)
-	{
-		*estadoDeVuelo = this->statusFlight;
-		retorno=0;
-	}
-
-	return retorno;
-}
-
-
-int Passenger_loadOnePassengerData(int* id,char* nombre, char* apellido, float* precio, int* tipoPasajero, char* codigoVuelo, int* statusFlight)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(id!=NULL && nombre != NULL && apellido != NULL && precio != NULL && tipoPasajero != NULL && codigoVuelo != NULL && statusFlight != NULL &&
-			!utn_GetNombreRango(nombre, "\nIngrese el nombre del pasajero: ", "Dato invalido. Ingrese el NOMBRE del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE) &&
-			!utn_GetNombreRango(apellido, "\nIngrese el apellido del pasajero: ", "Dato invalido. Ingrese el APELLIDO del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_APELLIDO, CANTIDAD_CARACTERES_APELLIDO) &&
-			!utn_GetFloatRango(precio, "\nIngresa el precio del vuelo, debe estar entre $10000 y $100000000: ", "El dato ingresado es invalido. Ingresa el precio del vuelo, debe estar entre $10000 y $100000000:", VUELO_PRECIO_MINIMO, VUELO_PRECIO_MAXIMO, CANTIDAD_CIFRAS_PRECIO) &&
-			!utn_GetIntRango(tipoPasajero, "\nTipo de pasajero:\n 1. FirstClass  \n 2. ExecutiveClass\n 3. EconomyClass\nIngrese el numero correspondiente al tipo: ", "Dato invalido. Ingrese el numero correspondiente al tipo: ", TIPO_PASAJERO_OPCION_MINIMA, TIPO_PASAJERO_OPCION_MAXIMA, 5) &&
-			!utn_GetIntRango(statusFlight, "\nEstado de vuelo:\n 1. Aterrizado\n 2. En horario\n 3. Demorado\n 4. En vuelo \nIngrese el numero que corresponda: ", "Dato ingresado invalido. Ingrese el numero que corresponda: ", TIPO_VUELO_OPCION_MINIMA, TIPO_VUELO_OPCION_MAXIMA, 5) &&
-			!utn_GetCadenaAlfanumericaRango(codigoVuelo, "Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\nNo se puede realizar la operacion debido a que ya no hay memoria\n", CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9))
-	{
-		retorno=0;
-	}
 	return retorno;
 }
 
@@ -433,6 +254,422 @@ int Passenger_verificarSerCodigoDeVuelo(char* cadenaAlfanumerica)
 	return retorno;
 }
 
+Passenger* Passenger_new()
+{
+	Passenger* nuevoPasajero;
+
+	nuevoPasajero = NULL;
+	nuevoPasajero = (Passenger*) malloc(sizeof(Passenger));
+	if(nuevoPasajero != NULL)
+	{
+		Passenger_setId(nuevoPasajero, 0);
+		Passenger_setNombre(nuevoPasajero,"");
+		Passenger_setApellido(nuevoPasajero,"");
+		Passenger_setCodigoVuelo(nuevoPasajero,"");
+		Passenger_setTipoPasajero(nuevoPasajero,0);
+		Passenger_setPrecio(nuevoPasajero,0);
+		Passenger_setEstadoVuelo(nuevoPasajero,0);
+	}
+	return nuevoPasajero;
+}
+
+Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoStr, char* precioStr, char* tipoPasajeroStr, char* codigoVueloStr, char* statusFlight)
+{
+	Passenger* nuevoPasajero;
+	int statusFlightNumero;
+	int tipoPasajeroNumero;
+	int idNumero;
+	float precioNumero;
+	int retorno;
+
+	nuevoPasajero = Passenger_new();
+	if(nuevoPasajero != NULL && nombreStr != NULL && idStr != NULL && apellidoStr != NULL && precioStr != NULL && tipoPasajeroStr != NULL &&
+			codigoVueloStr != NULL && statusFlight != NULL &&
+			!utn_verificarSerInt(idStr) && !utn_verificarSerNombre(nombreStr) && !utn_verificarSerNombre(apellidoStr) &&
+			!utn_verificarSerFloat(precioStr) && !Passenger_verificarSerCodigoDeVuelo(codigoVueloStr))
+	{
+		idNumero = atoi(idStr);
+		precioNumero = atof(precioStr);
+		if(idNumero >= 0 && precioNumero >= VUELO_PRECIO_MINIMO  &&
+				!Passenger_verificarYTransfomarEstadoVueloStringAInt(statusFlight, &statusFlightNumero) &&
+				!Passenger_verificarYTransfomarTipoPasajeroStringAInt(tipoPasajeroStr, &tipoPasajeroNumero) &&
+				!Passenger_setAll(nuevoPasajero, idNumero, nombreStr,apellidoStr, codigoVueloStr, tipoPasajeroNumero, precioNumero, statusFlightNumero))
+		{
+			retorno=0;
+		}
+	}
+	if(retorno)
+	{
+		free(nuevoPasajero);
+		nuevoPasajero = NULL;
+	}
+
+	return nuevoPasajero;
+}
+
+void Passenger_delete(LinkedList* pArrayListPassenger, Passenger* pasajeroAEliminar)
+{
+
+}
+
+int Passenger_setId(Passenger* this,int id)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL)
+	{
+		this->id = id;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int Passenger_getId(Passenger* this,int* id)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && id != NULL)
+	{
+		*id = this->id;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setNombre(Passenger* this,char* nombre)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && nombre != NULL)
+	{
+		strcpy(this->nombre, nombre);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int Passenger_getNombre(Passenger* this,char* nombre)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && nombre != NULL)
+	{
+		strcpy(nombre, this->nombre);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setApellido(Passenger* this,char* apellido)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && apellido != NULL)
+	{
+		strcpy(this->apellido, apellido);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int Passenger_getApellido(Passenger* this,char* apellido)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && apellido != NULL)
+	{
+		strcpy(apellido, this->apellido);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setCodigoVuelo(Passenger* this,char* codigoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && codigoVuelo != NULL)
+	{
+		strcpy(this->codigoVuelo, codigoVuelo);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int Passenger_getCodigoVuelo(Passenger* this,char* codigoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && codigoVuelo != NULL)
+	{
+		strcpy(codigoVuelo, this->codigoVuelo);
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setTipoPasajero(Passenger* this,int tipoPasajero)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL)
+	{
+		this->tipoPasajero = tipoPasajero;
+		retorno=0;
+	}
+	return retorno;
+}
+
+int Passenger_getTipoPasajero(Passenger* this,int* tipoPasajero)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && tipoPasajero != NULL)
+	{
+		*tipoPasajero = this->tipoPasajero;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setPrecio(Passenger* this,float precio)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL)
+	{
+		this->precio = precio;
+		retorno=0;
+	}
+	return retorno;
+}
+
+int Passenger_getPrecio(Passenger* this,float* precio)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && precio != NULL)
+	{
+		*precio = this->precio;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_setEstadoVuelo(Passenger* this,int estadoDeVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL)
+	{
+		this->statusFlight = estadoDeVuelo;
+		retorno=0;
+	}
+	return retorno;
+}
+
+int Passenger_getEstadoVuelo(Passenger* this,int* estadoDeVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(this != NULL && estadoDeVuelo != NULL)
+	{
+		*estadoDeVuelo = this->statusFlight;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+
+int Passenger_modificarNombre(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError, char* mensajeErrorSinMemoria)
+{
+	int retorno;
+	char nombre[CANTIDAD_CARACTERES_NOMBRE];
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje != NULL && mensajeError != NULL && mensajeErrorSinMemoria !=NULL)
+	{
+		if(!utn_GetNombreRango(nombre, mensaje, mensajeError, mensajeErrorSinMemoria, 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE) &&
+				!Passenger_setNombre(pasajeroAManipular, nombre))
+		{
+			retorno=0;
+		}
+	}
+
+	return retorno;
+}
+
+int Passenger_ModificarApellido(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError, char* mensajeErrorSinMemoria)
+{
+	int retorno;
+	char apellido[CANTIDAD_CARACTERES_APELLIDO];
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje != NULL && mensajeError != NULL && mensajeErrorSinMemoria != NULL)
+	{
+		if(!utn_GetNombreRango(apellido, mensaje, mensajeError, mensajeErrorSinMemoria, 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE) &&
+				!Passenger_setApellido(pasajeroAManipular, apellido))
+		{
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+int Passenger_ModificarCodigoVuelo(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError, char* mensajeErrorSinMemoria, char* mensajeCodigoInvalido)
+{
+	int retorno;
+	char codigoVuelo[CARACTERES_CODIGOVUELO];
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje !=NULL && mensajeError != NULL && mensajeErrorSinMemoria != NULL && mensajeCodigoInvalido !=NULL)
+	{
+		while(utn_GetCadenaAlfanumericaRango(codigoVuelo, mensaje, mensajeError, mensajeCodigoInvalido, CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9) ||
+				Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
+		{
+			printf("%s",mensajeCodigoInvalido);
+		}
+
+		utn_trasnformarCadenaAMayuscula(codigoVuelo);
+
+		if(!Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
+		{
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+int Passenger_ModificarTipoPasajero(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError)
+{
+	int retorno;
+	int tipoPasajero;
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje != NULL && mensajeError != NULL)
+	{
+		if(!utn_GetIntRango(&tipoPasajero, mensaje, mensajeError, TIPO_PASAJERO_OPCION_MINIMA, TIPO_PASAJERO_OPCION_MAXIMA, 5) &&
+				!Passenger_setTipoPasajero(pasajeroAManipular, tipoPasajero))
+		{
+			retorno=0;
+		}
+	}
+
+	return retorno;
+}
+
+int Passenger_ModificarPrecioVuelo(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError)
+{
+	int retorno;
+	float precio;
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje != NULL && mensajeError != NULL)
+	{
+		if(!utn_GetFloatRango(&precio, mensaje, mensajeError, VUELO_PRECIO_MINIMO, VUELO_PRECIO_MAXIMO, CANTIDAD_CIFRAS_PRECIO) &&
+				!Passenger_setPrecio(pasajeroAManipular, precio))
+		{
+			retorno=0;
+		}
+	}
+
+	return retorno;
+}
+
+int Passenger_ModificarEstadoVuelo(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError)
+{
+	int retorno;
+	int estadoDeVuelo;
+
+	retorno=1;
+
+	if(pasajeroAManipular!=NULL && mensaje != NULL && mensajeError != NULL)
+	{
+		if(!utn_GetIntRango(&estadoDeVuelo, mensaje, mensajeError, ESTADO_VUELO_OPCION_MINIMA, ESTADO_VUELO_OPCION_MAXIMA, 5) &&
+				!Passenger_setEstadoVuelo(pasajeroAManipular, estadoDeVuelo))
+		{
+			retorno=0;
+		}
+	}
+
+	return retorno;
+}
+
+
+int Passenger_askOnePassengerData(char* nombre, char* apellido, float* precio, int* tipoPasajero, char* codigoVuelo, int* statusFlight)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(nombre != NULL && apellido != NULL && precio != NULL && tipoPasajero != NULL && codigoVuelo != NULL && statusFlight != NULL &&
+			!utn_GetNombreRango(nombre, "\nIngrese el nombre del pasajero: ", "Dato invalido. Ingrese el NOMBRE del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE) &&
+			!utn_GetNombreRango(apellido, "\nIngrese el apellido del pasajero: ", "Dato invalido. Ingrese el APELLIDO del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_APELLIDO, CANTIDAD_CARACTERES_APELLIDO) &&
+			!utn_GetFloatRango(precio, "\nIngresa el precio del vuelo, debe estar entre $10000 y $100000000: ", "El dato ingresado es invalido. Ingresa el precio del vuelo, debe estar entre $10000 y $100000000:", VUELO_PRECIO_MINIMO, VUELO_PRECIO_MAXIMO, CANTIDAD_CIFRAS_PRECIO) &&
+			!utn_GetIntRango(tipoPasajero, "\nTipo de pasajero:\n 1. FirstClass  \n 2. ExecutiveClass\n 3. EconomyClass\nIngrese el numero correspondiente al tipo: ", "Dato invalido. Ingrese el numero correspondiente al tipo: ", TIPO_PASAJERO_OPCION_MINIMA, TIPO_PASAJERO_OPCION_MAXIMA, 5) &&
+			!utn_GetIntRango(statusFlight, "\nEstado de vuelo:\n 1. Aterrizado\n 2. En horario\n 3. Demorado\n 4. En vuelo \nIngrese el numero que corresponda: ", "Dato ingresado invalido. Ingrese el numero que corresponda: ", ESTADO_VUELO_OPCION_MINIMA, ESTADO_VUELO_OPCION_MAXIMA, 5))
+	{
+		while(utn_GetCadenaAlfanumericaRango(codigoVuelo, "\nTeniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\nNo se puede realizar la operacion debido a que ya no hay memoria\n", CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, CARACTERES_CODIGOVUELO) ||
+				Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
+		{
+			printf("\nEl codigo ingresado no cumple con los requisitos\n");
+		}
+		utn_trasnformarCadenaAMayuscula(codigoVuelo);
+		retorno=0;
+	}
+	return retorno;
+}
+
 int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar)
 {
 	int retorno;
@@ -443,54 +680,17 @@ int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar)
 	char codigoVuelo[CARACTERES_CODIGOVUELO];
 	int tipoPasajeroNumero;
 	int estadoDeVueloNumero;
-	char tipoPasajero[CARACTERES_TIPO_PASAJERO_PALABRA];
+	char tipoPasajeroPalabra[CARACTERES_TIPO_PASAJERO_PALABRA];
 	char estadoDeVueloPalabra[CARACTERES_ESTADO_VUELO_PALABRA];
 
 	retorno=1;
 
 	if(pPasajeroAMostrar != NULL &&
-			!Passenger_getId(pPasajeroAMostrar, &id) &&
-			!Passenger_getNombre(pPasajeroAMostrar, nombre) &&
-			!Passenger_getApellido(pPasajeroAMostrar, apellido) &&
-			!Passenger_getCodigoVuelo(pPasajeroAMostrar, codigoVuelo) &&
-			!Passenger_getTipoPasajero(pPasajeroAMostrar, &tipoPasajeroNumero)&&
-			!Passenger_getPrecio(pPasajeroAMostrar, &precio)  &&
-			!Passenger_getEstadoVuelo(pPasajeroAMostrar, &estadoDeVueloNumero))
+			!Passenger_getAll(pPasajeroAMostrar, &id, nombre, apellido, codigoVuelo, &tipoPasajeroNumero, &precio, &estadoDeVueloNumero) &&
+			!Passenger_verificarYTransfomarEstadoVueloIntAString(estadoDeVueloPalabra, estadoDeVueloNumero) &&
+			!Passenger_verificarYTransfomarTipoPasajeroIntAString(tipoPasajeroPalabra, tipoPasajeroNumero))
 	{
-		switch(estadoDeVueloNumero)
-		{
-			case 1:
-				strcpy(estadoDeVueloPalabra, "Aterrizado");
-				break;
-
-			case 2:
-				strcpy(estadoDeVueloPalabra, "En horario");
-				break;
-
-			case 3:
-				strcpy(estadoDeVueloPalabra, "Demorado");
-				break;
-
-			case 4:
-				strcpy(estadoDeVueloPalabra, "En vuelo");
-				break;
-		}
-
-		switch(tipoPasajeroNumero)
-		{
-			case 1:
-				strcpy(tipoPasajero, "First Class");
-				break;
-
-			case 2:
-				strcpy(tipoPasajero, "Executive Class");
-				break;
-
-			case 3:
-				strcpy(tipoPasajero, "EconomyClass");
-				break;
-		}
-		printf("|%*d|%*s|%*s|$%*.2f|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, id, -CANTIDAD_CARACTERES_NOMBRE, nombre, -CANTIDAD_CARACTERES_APELLIDO, apellido, -CANTIDAD_CIFRAS_PRECIO, precio, -CARACTERES_MARCO_CODIGOVUELO, codigoVuelo, -CARACTERES_TIPO_PASAJERO_PALABRA, tipoPasajero, -CARACTERES_ESTADO_VUELO_PALABRA, estadoDeVueloPalabra);
+		printf("|%*d|%*s|%*s|$%*.2f|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, id, -CANTIDAD_CARACTERES_NOMBRE, nombre, -CANTIDAD_CARACTERES_APELLIDO, apellido, -CANTIDAD_CIFRAS_PRECIO, precio, -CARACTERES_MARCO_CODIGOVUELO, codigoVuelo, -CARACTERES_TIPO_PASAJERO_PALABRA, tipoPasajeroPalabra, -CARACTERES_ESTADO_VUELO_PALABRA, estadoDeVueloPalabra);
 		retorno=0;
 	}
     return retorno;
@@ -517,62 +717,84 @@ int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
 	if(pFile != NULL && pArrayListPassenger != NULL)
 	{
 		retorno=0;
-		if((cantidadPasajerosAGuardar = ll_len(pArrayListPassenger) != -1))
+		cantidadPasajerosAGuardar = ll_len(pArrayListPassenger);
+		if(cantidadPasajerosAGuardar!= -1)
 		{
-			printf("\n\ntamanio link: %d\n\n", cantidadPasajerosAGuardar);
-			//fscanf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
 			fprintf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
 			for(int i=0; i<cantidadPasajerosAGuardar;i++)
 			{
-				if((pPasajeroAGuardar= Passenger_new()) != NULL && (pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i)) != NULL &&
-						!Passenger_getId(pPasajeroAGuardar, &idAGuardar) &&
-						!Passenger_getNombre(pPasajeroAGuardar, nombreAGuardar) &&
-						!Passenger_getApellido(pPasajeroAGuardar, apellidoAGuardar) &&
-						!Passenger_getCodigoVuelo(pPasajeroAGuardar, codigoVueloAGuardar) &&
-						!Passenger_getTipoPasajero(pPasajeroAGuardar, &tipoPasajero)&&
-						!Passenger_getPrecio(pPasajeroAGuardar, &precioAGuardar)  &&
-						!Passenger_getEstadoVuelo(pPasajeroAGuardar, &estadoVueloNumero))
+				pPasajeroAGuardar= Passenger_new();
+				if(pPasajeroAGuardar != NULL)
 				{
-					switch(estadoVueloNumero)
+					pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i);
+
+					if(pPasajeroAGuardar != NULL &&
+							!Passenger_getAll(pPasajeroAGuardar, &idAGuardar, nombreAGuardar, apellidoAGuardar, codigoVueloAGuardar, &tipoPasajero, &precioAGuardar, &estadoVueloNumero))
 					{
-						case 1:
-							strcpy(estadoVueloAGuardar, "Aterrizado");
-							break;
-
-						case 2:
-							strcpy(estadoVueloAGuardar, "En horario");
-							break;
-
-						case 3:
-							strcpy(estadoVueloAGuardar, "Demorado");
-							break;
-
-						case 4:
-							strcpy(estadoVueloAGuardar, "En vuelo");
-							break;
+						if(!Passenger_verificarYTransfomarEstadoVueloIntAString(estadoVueloAGuardar, estadoVueloNumero) &&
+								!Passenger_verificarYTransfomarTipoPasajeroIntAString(tipoPasajeroAGuardar, tipoPasajero))
+						{
+							if(fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n", idAGuardar, nombreAGuardar, apellidoAGuardar, precioAGuardar, codigoVueloAGuardar, tipoPasajeroAGuardar, estadoVueloAGuardar) < 0)
+							{
+								retorno=1;
+							}
+							else
+							{
+								Passenger_MostrarUnPasajero(pPasajeroAGuardar);
+							}
+						}
 					}
-
-					switch(tipoPasajero)
-					{
-						case 1:
-							strcpy(tipoPasajeroAGuardar, "First Class");
-							break;
-
-						case 2:
-							strcpy(tipoPasajeroAGuardar, "Executive Class");
-							break;
-
-						case 3:
-							strcpy(tipoPasajeroAGuardar, "EconomyClass");
-					}
-					if(fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n", idAGuardar, nombreAGuardar, apellidoAGuardar, precioAGuardar, codigoVueloAGuardar, tipoPasajeroAGuardar, estadoVueloAGuardar) < 0)
-					{
-						retorno++;
-					}
-					Passenger_MostrarUnPasajero(pPasajeroAGuardar);
 				}
 			}
 		}
 	}
+	return retorno;
+}
+
+
+
+
+int Passenger_setAll(Passenger* pasajeroASetear, int id, char* nombre,char* apellido, char* codigoVuelo, int tipoPasajero, float precio, int estadoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+	if(pasajeroASetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL)
+	{
+		if(!Passenger_setId(pasajeroASetear, id) &&
+				!Passenger_setNombre(pasajeroASetear, nombre) &&
+				!Passenger_setApellido(pasajeroASetear, apellido) &&
+				!Passenger_setTipoPasajero(pasajeroASetear, tipoPasajero) &&
+				!Passenger_setPrecio(pasajeroASetear, precio) &&
+				!Passenger_setEstadoVuelo(pasajeroASetear, estadoVuelo) &&
+				!Passenger_setCodigoVuelo(pasajeroASetear, codigoVuelo))
+		{
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+int Passenger_getAll(Passenger* pPasajeroAGetear, int* id, char* nombre,char* apellido, char* codigoVuelo, int* tipoPasajero, float* precio, int* estadoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(pPasajeroAGetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL &&
+			id != NULL && tipoPasajero !=NULL && precio !=NULL && estadoVuelo !=NULL)
+	{
+		if(!Passenger_getId(pPasajeroAGetear, id) &&
+				!Passenger_getNombre(pPasajeroAGetear, nombre) &&
+				!Passenger_getApellido(pPasajeroAGetear, apellido) &&
+				!Passenger_getTipoPasajero(pPasajeroAGetear, tipoPasajero)&&
+				!Passenger_getPrecio(pPasajeroAGetear, precio)  &&
+				!Passenger_getEstadoVuelo(pPasajeroAGetear, estadoVuelo) &&
+				!Passenger_getCodigoVuelo(pPasajeroAGetear, codigoVuelo))
+		{
+			retorno=0;
+		}
+	}
+
 	return retorno;
 }
