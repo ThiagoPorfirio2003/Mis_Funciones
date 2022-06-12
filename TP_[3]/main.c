@@ -22,6 +22,8 @@
 #define MENU_OPCION_MINIMA 1
 #define MENU_OPCION_MAXIMA 10
 
+//Falta todo lo binario, guardar los pasajeros si no se cargo previamente y el que el contador empieze en el ultimo id
+
 int main()
 {
 	setbuf(stdout, NULL);
@@ -31,7 +33,7 @@ int main()
 	int banderaOpcionDos;
 	int banderaOpcionTres;
 	int banderaOpcionSiete;
-	int banderaOpcionOcho;
+//	int banderaOpcionOcho;
 	int banderaOpcionNueve;
 	int banderaOpcionDiez;
 
@@ -40,7 +42,7 @@ int main()
 	banderaOpcionDos = 0;
 	banderaOpcionTres = 0;
 	banderaOpcionSiete = 0;
-	banderaOpcionOcho = 0;
+//	banderaOpcionOcho = 0;
 	banderaOpcionNueve = 0;
 	banderaOpcionDiez = 0;
 
@@ -80,7 +82,6 @@ int main()
 					{
 						printf("\n\nNo se puede cargar el archivo si ya lo hiciste antes\n\n");
 					}
-
 					break;
 
 				case 2:
@@ -90,7 +91,6 @@ int main()
 					if(controller_addPassenger(listaPasajeros, &contadorId))
 					{
 						printf("\n\nHa habido un error en la carga del pasajero\n\n");
-
 					}
 					else
 					{
@@ -117,13 +117,23 @@ int main()
 				case 5:
 					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionTres)
 					{
-						if(controller_removePassenger(listaPasajeros))
+						switch(controller_removePassenger(listaPasajeros))
 						{
-							printf("\n\nHa ocurrido un error en la eliminacion del pasajero\n\n");
-						}
-						else
-						{
-							printf("\n\nSe ha eliminado con exito al pasajero\n\n");
+							case -1:
+								printf("\n\nHa ocurrido un error en la eliminacion del pasajero\n\n");
+							break;
+
+							case 0:
+								printf("\n\nSe ha eliminado con exito al pasajero\n\n");
+								break;
+
+							case 1:
+								printf("\n\nSe ha eliminado pasajero, pero no se han podidio eliminar sus rastros de la lista\n\n");
+								break;
+
+							case 2:
+								printf("\n\nCancelaste la eliminacion del pasajero, o hubo un error de ultimo momento\n\n");
+								break;
 						}
 					}
 					else
@@ -148,19 +158,34 @@ int main()
 					break;
 
 				case 7:
+					banderaOpcionSiete=1;
+					Passenger_OrdenarPorApellidoYNombreAscendente(listaPasajeros);
 					break;
 
 				case 8:
-					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionTres)
+					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionSiete)
 					{
 						if(controller_saveAsText("data.csv",listaPasajeros))
 						{
-							printf("\n\nAunque se guardaron los archivos, hubo por lo menos alguno con error\n\n");
+							printf("\n\nHubo problemas en el guardado\n\n");
 						}
+						banderaOpcionDiez=1;
 					}
 					else
 					{
-						printf("\n\nNo se pueden guardar los pasajeros, debido a que no hay ninguno cargado\n\n");
+						if(banderaOpcionTres)
+						{
+							if(controller_addAsText("data.csv", listaPasajeros))
+							{
+								printf("\n\nHubo problemas en el guardado\n\n");
+							}
+							banderaOpcionDiez=1;
+						}
+						else
+						{
+							printf("\n\nNo se pueden guardar los pasajeros, debido a que no hay ninguno cargado\n\n");
+						}
+
 					}
 
 

@@ -30,11 +30,10 @@ int Passenger_transformarIDaString(char* idString, int idNumero);
 int Passenger_transformarPrecioaString(char* precioString, float precioNumero);
 
 
-
 Passenger* Passenger_new();
 Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoStr, char* precioStr, char* tipoPasajeroStr, char* codigoVueloStr, char* statusFlight);
 
-void Passenger_delete(LinkedList* pArrayListPassenger, Passenger* pasajeroAEliminar);
+int Passenger_delete(Passenger* pasajeroAEliminar);
 
 int Passenger_setId(Passenger* this,int id);
 int Passenger_getId(Passenger* this,int* id);
@@ -67,7 +66,6 @@ int Passenger_ModificarTipoPasajero(Passenger* pasajeroAManipular, char* mensaje
 int Passenger_ModificarPrecioVuelo(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError);
 int Passenger_ModificarEstadoVuelo(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError);
 
-
 int Passenger_askOnePassengerData(char* nombre, char* apellido, float* precio, int* tipoPasajero, char* codigoVuelo, int* statusFlight);
 
 int Passenger_verificarSerCodigoDeVuelo(char* cadenaAlfanumerica);
@@ -75,5 +73,11 @@ int Passenger_verificarSerCodigoDeVuelo(char* cadenaAlfanumerica);
 int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar);
 
 int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger);
+
+int Passenger_SwapPassenger(Passenger* this, Passenger* pasajeroDeCambio);
+int Passenger_SwapPorApellidoAscendente(Passenger* this, Passenger* pasajeroDeCambio);
+int Passenger_SwapPorNombreAscendentre(Passenger* this, Passenger* pasajeroDeCambio);
+int Passenger_OrdenarPorApellidoYNombreAscendente(LinkedList* pArrayListPassenger);
+
 
 #endif /* PASSENGER_H_ */

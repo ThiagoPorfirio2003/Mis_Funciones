@@ -35,7 +35,7 @@ int utn_verificarSerInt(char* cadenaDeCaracteres)
 	int retorno;
 	retorno = 1;
 
-	if(cadenaDeCaracteres != NULL)
+	if(cadenaDeCaracteres != NULL && (*cadenaDeCaracteres != '0' || *(cadenaDeCaracteres+1) == '\0'))
 	{
 		retorno=0;
 
@@ -160,6 +160,7 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 
 	retorno =1;
 
+	printf("%c\n", *caracter);
 	if(caracter != NULL && (*caracter == 'á' ||
 			*caracter == 'é' ||
 			*caracter == 'í' ||
@@ -173,6 +174,7 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 			*caracter == 'ñ' ||
 			*caracter == 'Ñ'))
 	{
+		printf("no\n");
 		retorno=0;
 	}
 

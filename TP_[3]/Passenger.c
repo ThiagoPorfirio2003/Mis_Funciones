@@ -254,6 +254,21 @@ int Passenger_verificarSerCodigoDeVuelo(char* cadenaAlfanumerica)
 	return retorno;
 }
 
+int Passenger_delete(Passenger* pasajeroAEliminar)
+{
+	int retorno;
+
+	retorno=1;
+	if(pasajeroAEliminar != NULL)
+	{
+		free(pasajeroAEliminar);
+		pasajeroAEliminar =NULL;
+		retorno=0;
+	}
+
+	return retorno;
+}
+
 Passenger* Passenger_new()
 {
 	Passenger* nuevoPasajero;
@@ -300,17 +315,12 @@ Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoSt
 	}
 	if(retorno)
 	{
-		free(nuevoPasajero);
-		nuevoPasajero = NULL;
+		Passenger_delete(nuevoPasajero);
 	}
 
 	return nuevoPasajero;
 }
 
-void Passenger_delete(LinkedList* pArrayListPassenger, Passenger* pasajeroAEliminar)
-{
-
-}
 
 int Passenger_setId(Passenger* this,int id)
 {
@@ -796,5 +806,133 @@ int Passenger_getAll(Passenger* pPasajeroAGetear, int* id, char* nombre,char* ap
 		}
 	}
 
+	return retorno;
+}
+
+
+int Passenger_SwapPassenger(Passenger* this, Passenger* pasajeroDeCambio)
+{
+	int retorno;
+	Passenger pasajeroAuxiliar;
+
+	//pasajeroAuxiliar = Passenger_new();
+
+	retorno=1;
+	if(this != NULL && pasajeroDeCambio != NULL)// && pasajeroAuxiliar != NULL)
+	{
+		pasajeroAuxiliar = *this;
+		*this = *pasajeroDeCambio;
+		*pasajeroDeCambio = pasajeroAuxiliar;
+		retorno=0;
+	}
+
+//	Passenger_delete(pasajeroAuxiliar);
+
+	return retorno;
+}
+
+int Passenger_SwapPorApellidoAscendente(Passenger* this, Passenger* pasajeroDeCambio)
+{
+	int retorno;
+	char apellidoUno[CANTIDAD_CARACTERES_APELLIDO];
+	char apellidoDos[CANTIDAD_CARACTERES_APELLIDO];
+	int estadoSwap;
+
+	retorno=2;
+
+	if(this != NULL && pasajeroDeCambio != NULL)
+	{
+
+		if(!Passenger_getApellido(this, apellidoUno) && !Passenger_getApellido(pasajeroDeCambio, apellidoDos))
+		{
+			estadoSwap= strcmp(apellidoUno, apellidoDos);
+			if(estadoSwap==1)
+			{
+				Passenger_SwapPassenger(this,pasajeroDeCambio);
+			}
+			retorno= estadoSwap;
+		}
+	}
+	return retorno;
+}
+
+int Passenger_SwapPorNombreAscendentre(Passenger* this, Passenger* pasajeroDeCambio)
+{
+	int retorno;
+	char nombreUno[CANTIDAD_CARACTERES_APELLIDO];
+	char nombreDos[CANTIDAD_CARACTERES_APELLIDO];
+
+	retorno=1;
+
+	if(this != NULL && pasajeroDeCambio != NULL)
+	{
+		if(!Passenger_getNombre(this, nombreUno) && !Passenger_getNombre(pasajeroDeCambio, nombreDos))
+		{
+			if(strcmp(nombreUno, nombreDos)==1)
+			{
+				Passenger_SwapPassenger(this,pasajeroDeCambio);
+				retorno=0;
+			}
+		}
+	}
+	return retorno;
+}
+
+int Passenger_OrdenarPorApellidoYNombreAscendente(LinkedList* pArrayListPassenger)
+{
+	int retorno;
+	int cantidadPasajeros;
+	int flagSwap;
+	int limiteDecremental;
+	int estadoSwapApellido;
+	int estadoSwapNombre;
+	Passenger* pasajeroAComparar;
+	Passenger* pasajeroACompararAuxiliar;
+
+	retorno=1;
+
+	if(pArrayListPassenger != NULL)
+	{
+		cantidadPasajeros = ll_len(pArrayListPassenger);
+		if(cantidadPasajeros != 1)
+		{
+			limiteDecremental= cantidadPasajeros-1;
+			retorno=0;
+				do{
+					flagSwap=0;
+					for(int i=0;i<limiteDecremental;i++)
+					{
+						pasajeroAComparar= (Passenger*) ll_get(pArrayListPassenger,i);
+						pasajeroACompararAuxiliar = (Passenger*) ll_get(pArrayListPassenger,i+1);
+
+						if(pasajeroAComparar != NULL && pasajeroACompararAuxiliar !=NULL)
+						{
+							estadoSwapApellido = Passenger_SwapPorApellidoAscendente(pasajeroAComparar, pasajeroACompararAuxiliar);
+							if(estadoSwapApellido != 0)
+							{
+								if(estadoSwapApellido==1)
+								{
+									flagSwap=1;
+								}
+							}
+							else
+							{
+								estadoSwapNombre = Passenger_SwapPorNombreAscendentre(pasajeroAComparar, pasajeroACompararAuxiliar);
+								if(estadoSwapNombre==1)
+								{
+									flagSwap=1;
+								}
+							}
+						}
+						else
+						{
+							retorno=1;
+							break;
+						}
+					}
+					limiteDecremental--;
+				}while(flagSwap);
+		}
+	}
 	return retorno;
 }

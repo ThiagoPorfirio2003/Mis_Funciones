@@ -18,7 +18,7 @@ int utn_VerificarSerMayuscula(char* caracter);
 
 int utn_VerificarSerLetra(char* caracter);
 
-int utn_VerificarSerLetra_ASCII_EXTEND(char caracter);
+int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter);
 
 int utn_verificarSerNombre(char* cadenaDeCaracteres);
 

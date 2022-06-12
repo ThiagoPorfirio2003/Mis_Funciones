@@ -48,7 +48,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
 
 	if(path != NULL && pArrayListPassenger != NULL)
 	{
-		pArchivo=fopen(path,"r");
+		pArchivo=fopen(path,"r+");
 		printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
 		printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
@@ -145,6 +145,9 @@ int controller_findPassengerById(LinkedList* pArrayListPassenger, int idAEncontr
 
 	if(cantidadPasajeros != -1)
 	{
+		do{
+
+		}while(1);
 		for(int i=0;i<cantidadPasajeros;i++)
 		{
 			if((pasajeroBusqueda = (Passenger*) ll_get(pArrayListPassenger, i)) != NULL && !Passenger_getId(pasajeroBusqueda ,&idAuxiliar) &&
@@ -263,16 +266,42 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
     int retorno;
     int posicionPasajeroAEliminar;
     int idAEncontrar;
+    int preguntaDeConfirmacion;
+    Passenger* pPasajeroAEliminar;
 
-    retorno=1;
+    retorno=-1;
 
 	if(pArrayListPassenger != NULL && !utn_GetIntRango(&idAEncontrar, "\nIngrese el id del pasajero cuyos datos desea modificar: ", "Dato invalido. Ingrese el id del pasajero cuyos datos desea modificar: ", 0, 2000, 30))
     {
     	posicionPasajeroAEliminar = controller_findPassengerById(pArrayListPassenger, idAEncontrar);
 
-    	if(posicionPasajeroAEliminar != -1 && !ll_remove(pArrayListPassenger,posicionPasajeroAEliminar))
+    	if(posicionPasajeroAEliminar != -1)
     	{
-    		retorno=0;
+    		pPasajeroAEliminar = (Passenger*) ll_get(pArrayListPassenger, posicionPasajeroAEliminar);
+    		if(pPasajeroAEliminar != NULL )
+			{
+				printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				printf("|%*s|%*s|%*s|$%*s|%*s|%*s|%*s|\n", -CANTIDAD_MAXIMA_CIFRAS_ID, "ID", -CANTIDAD_CARACTERES_NOMBRE, "Nombre", -CANTIDAD_CARACTERES_APELLIDO, "Apellido", -CANTIDAD_CIFRAS_PRECIO, "Precio", -CARACTERES_MARCO_CODIGOVUELO, "Codigo de vuelo", -CARACTERES_TIPO_PASAJERO_PALABRA, "Tipo de pasajero", -CARACTERES_ESTADO_VUELO_PALABRA, "Estado de vuelo");
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				Passenger_MostrarUnPasajero(pPasajeroAEliminar);
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
+
+				if(!utn_GetIntRango(&preguntaDeConfirmacion, "Si esta seguro de querer eliminarlo presione 1, de lo contrario el 0: ", "Dato invalido. Si esta seguro de querer eliminarlo presione 1, de lo contrario el 0: ", 0, 1, 1))
+				{
+					if(preguntaDeConfirmacion && !Passenger_delete(pPasajeroAEliminar))
+					{
+						retorno=0;
+						if(ll_remove(pArrayListPassenger,posicionPasajeroAEliminar))
+						{
+							retorno=1;
+						}
+					}
+					else
+					{
+						retorno=2;
+					}
+				}
+			}
     	}
     }
 
@@ -349,8 +378,48 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 
 	if(path != NULL && pArrayListPassenger != NULL)
 	{
-		pArchivo=fopen(path,"w");
+		pArchivo=fopen(path,"w+");
 
+		if(!Passenger_saveAsText(pArchivo, pArrayListPassenger))
+		{
+			retorno=0;
+		}
+		while(!fclose(pArchivo))
+		{
+
+		}
+	}
+	return retorno;
+}
+
+
+/** \brief Guarda los datos de los pasajeros en el archivo data.csv (modo binario).
+ *
+ * \param path char*
+ * \param pArrayListPassenger LinkedList*
+ * \return int
+ *
+ */
+int controller_saveAsBinary(char* path , LinkedList* pArrayListPassenger)
+{
+    return 1;
+}
+
+int controller_addAsText(char* path , LinkedList* pArrayListPassenger)
+{
+	int retorno;
+	FILE* pArchivo;
+
+	retorno =-1;
+
+	if(path != NULL && pArrayListPassenger != NULL)
+	{
+		pArchivo=fopen(path,"a");
+
+		if(pArchivo == NULL)
+		{
+			printf("Nulo la que lo pario");
+		}
 		if(!Passenger_saveAsText(pArchivo, pArrayListPassenger))
 		{
 			retorno=0;
@@ -367,15 +436,26 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 	return retorno;
 }
 
-/** \brief Guarda los datos de los pasajeros en el archivo data.csv (modo binario).
- *
- * \param path char*
- * \param pArrayListPassenger LinkedList*
- * \return int
- *
- */
-int controller_saveAsBinary(char* path , LinkedList* pArrayListPassenger)
-{
-    return 1;
-}
 
+
+int controller_saveAsBinaryContador(char* path , LinkedList* pArrayListPassenger)
+{
+	int retorno;
+	FILE* pArchivo;
+
+	retorno=1;
+
+	if(path != NULL && pArrayListPassenger != NULL)
+	{
+		pArchivo = fopen(path, "r+b");
+
+		if(pArchivo != NULL)
+		{
+
+		}
+
+		fclose(pArchivo);
+	}
+
+	return retorno;
+}
