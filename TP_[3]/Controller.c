@@ -250,7 +250,6 @@ int controller_editPassenger(LinkedList* pArrayListPassenger)
 			}
 		}
 	}
-
     return retorno;
 }
 
@@ -344,7 +343,6 @@ int controller_ListPassenger(LinkedList* pArrayListPassenger)
 			printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		}
 	}
-
     return retorno;
 }
 

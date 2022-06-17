@@ -59,7 +59,7 @@ static Node* getNode(LinkedList* this, int nodeIndex)
 
 	pNode =NULL;
 
-	if(this != NULL && nodeIndex >= 0 && nodeIndex < this->size )
+	if(this != NULL && nodeIndex >-1 && nodeIndex < ll_len(this))
 	{
 		pNode = this->pFirstNode;
 		for(int i=0;i<nodeIndex;i++)
@@ -96,6 +96,47 @@ Node* test_getNode(LinkedList* this, int nodeIndex)
 static int addNode(LinkedList* this, int nodeIndex,void* pElement)
 {
     int returnAux = -1;
+    int tamanioLinkedList;
+    Node* pNuevoNodo;
+    Node* pNodoAuxiliar;
+
+    pNuevoNodo = NULL;
+    pNodoAuxiliar = NULL;
+    tamanioLinkedList = ll_len(this);
+
+    if(this != NULL && nodeIndex >-1 && nodeIndex <= tamanioLinkedList)
+    {
+    	pNuevoNodo = (Node*) malloc(sizeof(Node*));
+
+    	if(pNuevoNodo != NULL)
+    	{
+        	pNuevoNodo->pElement = pElement;
+        	this->size++;
+
+        	if(nodeIndex != 0)
+        	{
+        		if(nodeIndex < tamanioLinkedList)
+        		{
+        			pNodoAuxiliar = getNode(this, nodeIndex);
+            		pNuevoNodo->pNextNode = pNodoAuxiliar;
+        		}
+        		else
+        		{
+        			pNuevoNodo->pNextNode = NULL;
+        		}
+       			pNodoAuxiliar = getNode(this, nodeIndex-1);
+    			pNodoAuxiliar->pNextNode = pNuevoNodo;
+        	}
+        	else
+        	{
+    			pNuevoNodo->pNextNode = this->pFirstNode;
+    			this->pFirstNode = pNuevoNodo;
+        	}
+
+			returnAux =0;
+    	}
+    }
+
     return returnAux;
 }
 
@@ -125,6 +166,11 @@ int ll_add(LinkedList* this, void* pElement)
 {
     int returnAux = -1;
 
+    if(this != NULL)
+    {
+    	returnAux = addNode(this, ll_len(this), pElement);
+    }
+
     return returnAux;
 }
 
@@ -138,7 +184,20 @@ int ll_add(LinkedList* this, void* pElement)
  */
 void* ll_get(LinkedList* this, int index)
 {
-    void* returnAux = NULL;
+    void* returnAux;
+    Node* pNodoAuxiliar;
+
+    returnAux =NULL;
+
+    if(this != NULL && index > -1 && index < ll_len(this))
+    {
+    	pNodoAuxiliar = getNode(this, index);
+
+    	if(pNodoAuxiliar != NULL)
+    	{
+        	returnAux = pNodoAuxiliar->pElement;
+    	}
+    }
 
     return returnAux;
 }
@@ -155,7 +214,22 @@ void* ll_get(LinkedList* this, int index)
  */
 int ll_set(LinkedList* this, int index,void* pElement)
 {
-    int returnAux = -1;
+    int returnAux;
+    Node* pNodoAModificar;
+
+    returnAux =-1;
+    pNodoAModificar =NULL;
+
+    if(this != NULL && index>-1 && index < ll_len(this))
+    {
+    	pNodoAModificar = getNode(this,index);
+
+    	if(pNodoAModificar != NULL)
+    	{
+    		pNodoAModificar->pElement = pElement;
+    		returnAux=0;
+    	}
+    }
 
     return returnAux;
 }
@@ -171,8 +245,38 @@ int ll_set(LinkedList* this, int index,void* pElement)
  */
 int ll_remove(LinkedList* this,int index)
 {
-    int returnAux = -1;
+    int returnAux;
+    int tamanioLinkedList;
+    Node* pNodoAEliminar;
+    Node* pNodoAuxiliar;
 
+    tamanioLinkedList = ll_len(this);
+    returnAux =-1;
+    pNodoAEliminar = NULL;
+    pNodoAuxiliar = NULL;
+
+    if(this != NULL && index > -1 && index < tamanioLinkedList)
+    {
+    	pNodoAEliminar = getNode(this,index);
+    	if(pNodoAEliminar != NULL)
+    	{
+        	if(index != 0)
+        	{
+        		pNodoAuxiliar = getNode(this,index-1);
+        		if(pNodoAuxiliar != NULL)
+        		{
+            		pNodoAuxiliar->pNextNode= pNodoAEliminar->pNextNode;
+        		}
+        	}
+        	else
+        	{
+        		this->pFirstNode = pNodoAEliminar->pNextNode;
+        	}
+        	free(pNodoAEliminar);
+        	this->size--;
+        	returnAux=0;
+    	}
+    }
     return returnAux;
 }
 
@@ -186,7 +290,25 @@ int ll_remove(LinkedList* this,int index)
  */
 int ll_clear(LinkedList* this)
 {
-    int returnAux = -1;
+    int returnAux;;
+    int tamanioLinkedList;
+    returnAux = -1;
+
+    if(this != NULL)
+    {
+    	returnAux = 0;
+    	tamanioLinkedList = ll_len(this);
+
+    	if(tamanioLinkedList >0)
+    	{
+    		tamanioLinkedList--;
+    	}
+
+    	for(int i=tamanioLinkedList ; i> -1; i--)
+    	{
+    		ll_remove(this, i);
+    	}
+    }
 
     return returnAux;
 }
@@ -201,7 +323,16 @@ int ll_clear(LinkedList* this)
  */
 int ll_deleteLinkedList(LinkedList* this)
 {
-    int returnAux = -1;
+    int returnAux;
+
+    returnAux=-1;
+
+    if(this != NULL)
+    {
+    	returnAux =0;
+    	ll_clear(this);
+    	free(this);
+    }
 
     return returnAux;
 }
@@ -216,7 +347,25 @@ int ll_deleteLinkedList(LinkedList* this)
  */
 int ll_indexOf(LinkedList* this, void* pElement)
 {
-    int returnAux = -1;
+    int returnAux;
+    int tamanioLinkedList;
+    void* pElementoAuxiliar;
+
+    returnAux=-1;
+    pElementoAuxiliar = NULL;
+    if(this != NULL)
+    {
+        tamanioLinkedList = ll_len(this);
+
+    	for(int i=0;i< tamanioLinkedList;i++)
+    	{
+    		pElementoAuxiliar =ll_get(this,i);
+    		if(pElementoAuxiliar == pElement)
+    		{
+    			returnAux=i;
+    		}
+    	}
+    }
 
     return returnAux;
 }
@@ -231,7 +380,21 @@ int ll_indexOf(LinkedList* this, void* pElement)
  */
 int ll_isEmpty(LinkedList* this)
 {
-    int returnAux = -1;
+    int returnAux;
+
+    returnAux=-1;
+
+    if(this != NULL)
+    {
+    	if(ll_len(this))
+    	{
+    		returnAux=0;
+    	}
+    	else
+    	{
+    		returnAux=1;
+    	}
+    }
 
     return returnAux;
 }
@@ -247,10 +410,19 @@ int ll_isEmpty(LinkedList* this)
  */
 int ll_push(LinkedList* this, int index, void* pElement)
 {
-    int returnAux = -1;
+    int returnAux;
+
+    returnAux=-1;
+
+    if(this != NULL && index > -1 && index <= ll_len(this))
+    {
+    	returnAux = addNode(this, index, pElement);
+    }
 
     return returnAux;
 }
+
+
 
 
 /** \brief Elimina el elemento de la posicion indicada y retorna su puntero
@@ -263,7 +435,18 @@ int ll_push(LinkedList* this, int index, void* pElement)
  */
 void* ll_pop(LinkedList* this,int index)
 {
-    void* returnAux = NULL;
+    void* returnAux;
+
+    returnAux = NULL;
+
+    if(this != NULL && index < ll_len(this) && index > -1)
+    {
+    	returnAux= ll_get(this, index);
+    	if(returnAux != NULL)
+    	{
+    		ll_remove(this,index);
+    	}
+    }
 
     return returnAux;
 }
@@ -279,7 +462,20 @@ void* ll_pop(LinkedList* this,int index)
 */
 int ll_contains(LinkedList* this, void* pElement)
 {
-    int returnAux = -1;
+    int returnAux;
+    returnAux = -1;
+
+    if(this != NULL)
+    {
+    	if(ll_indexOf(this,pElement)>-1)
+    	{
+    		returnAux =1;
+    	}
+    	else
+    	{
+    		returnAux=0;
+    	}
+    }
 
     return returnAux;
 }
@@ -295,7 +491,27 @@ int ll_contains(LinkedList* this, void* pElement)
 */
 int ll_containsAll(LinkedList* this,LinkedList* this2)
 {
-    int returnAux = -1;
+    int returnAux;
+    int tamanioPrimerThis;
+    int tamanioSegundoThis;
+
+    returnAux = -1;
+
+    if(this != NULL && this2 !=NULL)
+    {
+    	returnAux = 1;
+    	tamanioPrimerThis = ll_len(this);
+    	tamanioSegundoThis = ll_len(this2);
+
+    	for(int i=0; i < tamanioPrimerThis || i < tamanioSegundoThis;i++)
+    	{
+    		if(!ll_contains(this, ll_get(this2,i)))
+    		{
+    			returnAux = 0;
+    			break;
+    		}
+    	}
+    }
 
     return returnAux;
 }
@@ -312,7 +528,22 @@ int ll_containsAll(LinkedList* this,LinkedList* this2)
 */
 LinkedList* ll_subList(LinkedList* this,int from,int to)
 {
-    LinkedList* cloneArray = NULL;
+    LinkedList* cloneArray;
+
+	cloneArray =NULL;
+
+    if(this != NULL && from>-1 && to<=ll_len(this) && from <to)
+    {
+    	cloneArray = ll_newLinkedList();
+
+    	if(cloneArray != NULL)
+    	{
+        	for(int i= from; i<to; i++)
+        	{
+        		ll_add(cloneArray, ll_get(this,i));
+        	}
+    	}
+    }
 
     return cloneArray;
 }
@@ -327,7 +558,22 @@ LinkedList* ll_subList(LinkedList* this,int from,int to)
 */
 LinkedList* ll_clone(LinkedList* this)
 {
-    LinkedList* cloneArray = NULL;
+    LinkedList* cloneArray;
+    void* pElementoAuxiliar;
+
+    cloneArray = NULL;
+
+    if(this != NULL)
+    {
+    	cloneArray = ll_newLinkedList();
+    	if(cloneArray != NULL)
+    	{
+    		for(int i=0; i< ll_get(this);i++)
+    		{
+    			ll_add(cloneArray,pElementoAuxiliar);
+    		}
+    	}
+    }
 
     return cloneArray;
 }

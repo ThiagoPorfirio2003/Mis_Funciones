@@ -27,7 +27,12 @@ struct a{
 int main(void) {
 	setbuf(stdout, NULL);
 
-
+	printf("HOLA\n");
+	for(int i=0; i<=0;i++)
+	{
+		printf("HOLA\n");
+	}
+/*
 
 	FILE *bin;
 	struct a pers;
@@ -40,7 +45,7 @@ int main(void) {
 	fwrite(&pers,sizeof(pers),1,bin);
 	fclose(bin);
 
-
+*/
 	return EXIT_SUCCESS;
 }
 

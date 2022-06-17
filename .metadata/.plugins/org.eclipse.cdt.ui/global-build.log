@@ -1,6 +1,5 @@
-18:27:15 **** Incremental Build of configuration Debug for project Ejercicio1-3 ****
+18:59:05 **** Incremental Build of configuration Debug for project likedList ****
 Info: Internal Builder is used for build
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Ejercicio1-3.o" "..\\src\\Ejercicio1-3.c" 
-gcc -o Ejercicio1-3.exe "src\\Ejercicio1-3.o" 
-Info: Nothing to build for Ejercicio1-3
-Info: Nothing to build for Ejercicio1-3
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\LinkedList.o" "..\\src\\LinkedList.c" 
+gcc -o likedList "src\\LinkedList.o" "src\\main.o" "testing\\src\\Employee.o" "testing\\src\\addNodeTest.o" "testing\\src\\addTest.o" "testing\\src\\clearTest.o" "testing\\src\\cloneTest.o" "testing\\src\\containsAllTest.o" "testing\\src\\containsTest.o" "testing\\src\\deleteLinkedListTest.o" "testing\\src\\getNodeTest.o" "testing\\src\\getTest.o" "testing\\src\\indexOfTest.o" "testing\\src\\isEmptyTest.o" "testing\\src\\lenTest.o" "testing\\src\\main_test.o" "testing\\src\\newTest.o" "testing\\src\\popTest.o" "testing\\src\\pushTest.o" "testing\\src\\removeTest.o" "testing\\src\\setTest.o" "testing\\src\\sortTest.o" "testing\\src\\subListTest.o" "testing\\utest.o" 
+Info: Nothing to build for likedList

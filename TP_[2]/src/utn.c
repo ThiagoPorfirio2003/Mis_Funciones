@@ -160,7 +160,6 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 
 	retorno =1;
 
-	printf("%c\n", *caracter);
 	if(caracter != NULL && (*caracter == 'á' ||
 			*caracter == 'é' ||
 			*caracter == 'í' ||
@@ -174,7 +173,20 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 			*caracter == 'ñ' ||
 			*caracter == 'Ñ'))
 	{
-		printf("no\n");
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int utn_VerificarSerLetraEspanol(char* caracter)
+{
+	int retorno;
+
+	retorno =1;
+
+	if(caracter!=NULL && utn_VerificarSerLetra(caracter) && utn_VerificarSerLetra_ASCII_EXTEND(caracter))
+	{
 		retorno=0;
 	}
 
@@ -192,9 +204,9 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 		retorno =0;
 
 		do{
-			if(utn_VerificarSerLetra(cadenaDeCaracteres))
+			if(utn_VerificarSerLetra(cadenaDeCaracteres) == 0 && utn_VerificarSerLetra_ASCII_EXTEND(cadenaDeCaracteres) == 0)
 			{
-				if(isspace(*cadenaDeCaracteres) || *cadenaDeCaracteres == '-')
+				if(*cadenaDeCaracteres == ' ' || *cadenaDeCaracteres == '-')
 				{
 					if(*(cadenaDeCaracteres+1)=='\0' && *(cadenaDeCaracteres+1) == '\0')
 					{
@@ -213,7 +225,6 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 	}
 	return retorno;
 }
-
 
 int utn_verificarSerCadenaAlfanumerica(char* cadenaCaracteres)
 {
@@ -370,7 +381,7 @@ int utn_CorregirNombre(char* direccionPalabra)
 
 		while(*direccionPalabra !='\0')
 		{
-			if(isalpha(*direccionPalabra))
+			if(utn_VerificarSerLetraEspanol(direccionPalabra))
 			{
 				if(banderaEspacio)
 				{

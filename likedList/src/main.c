@@ -26,6 +26,7 @@
 
 int main(void)
 {
+	setbuf(stdout, NULL);
 
 	//PUSH SE METE EN EL MEDIO DE DOS
 	// SET ACTUALIZA EL ELEMENTO DE UN NODO
@@ -45,7 +46,7 @@ int main(void)
 //	startTesting(14); // ll_pop
 //	startTesting(15); // ll_contains
 //	startTesting(16); // ll_containsAll
-//	startTesting(17); // ll_subList
+	startTesting(17); // ll_subList
 //	startTesting(18); // ll_clone
 //	startTesting(19); // ll_sort */
 

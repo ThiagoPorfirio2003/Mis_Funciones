@@ -583,7 +583,7 @@ int Passenger_ModificarCodigoVuelo(Passenger* pasajeroAManipular, char* mensaje,
 	if(pasajeroAManipular!=NULL && mensaje !=NULL && mensajeError != NULL && mensajeErrorSinMemoria != NULL && mensajeCodigoInvalido !=NULL)
 	{
 		while(utn_GetCadenaAlfanumericaRango(codigoVuelo, mensaje, mensajeError, mensajeCodigoInvalido, CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9) ||
-				Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
+//				Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
 		{
 			printf("%s",mensajeCodigoInvalido);
 		}
