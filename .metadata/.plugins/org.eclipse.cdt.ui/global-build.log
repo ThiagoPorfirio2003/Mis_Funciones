@@ -1,5 +1,13 @@
-18:59:05 **** Incremental Build of configuration Debug for project likedList ****
+12:25:52 **** Incremental Build of configuration Debug for project TP_[3] ****
 Info: Internal Builder is used for build
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\LinkedList.o" "..\\src\\LinkedList.c" 
-gcc -o likedList "src\\LinkedList.o" "src\\main.o" "testing\\src\\Employee.o" "testing\\src\\addNodeTest.o" "testing\\src\\addTest.o" "testing\\src\\clearTest.o" "testing\\src\\cloneTest.o" "testing\\src\\containsAllTest.o" "testing\\src\\containsTest.o" "testing\\src\\deleteLinkedListTest.o" "testing\\src\\getNodeTest.o" "testing\\src\\getTest.o" "testing\\src\\indexOfTest.o" "testing\\src\\isEmptyTest.o" "testing\\src\\lenTest.o" "testing\\src\\main_test.o" "testing\\src\\newTest.o" "testing\\src\\popTest.o" "testing\\src\\pushTest.o" "testing\\src\\removeTest.o" "testing\\src\\setTest.o" "testing\\src\\sortTest.o" "testing\\src\\subListTest.o" "testing\\utest.o" 
-Info: Nothing to build for likedList
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o Controller.o "..\\Controller.c" 
+gcc "-LC:\\Users\\thiag\\Desktop\\Facultad\\Proyectos eclipse\\Primer Cuatrimestre\\Guia de ejercicios\\TP_[3]" -o TP_[3].exe Controller.o Passenger.o main.o memoriaDinamica.o parser.o utn.o -lLinkedList 
+17:08:45 **** Rebuild of configuration Debug for project TP_[3] ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o memoriaDinamica.o "..\\memoriaDinamica.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o Passenger.o "..\\Passenger.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o parser.o "..\\parser.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o main.o "..\\main.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o utn.o "..\\utn.c" 
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o Controller.o "..\\Controller.c" 
+gcc "-LC:\\Users\\thiag\\Desktop\\Facultad\\Proyectos eclipse\\Primer Cuatrimestre\\Guia de ejercicios\\TP_[3]" -o TP_[3].exe Controller.o Passenger.o main.o memoriaDinamica.o parser.o utn.o -lLinkedList 

@@ -68,233 +68,131 @@ int main(void) {
 
 
 /*
-	char numeroPrueba[256];
+/*
+ * int Passenger_SwapPorApellidoDescendente(Passenger* primerPasajero, Passenger* segundoPasajero)
+{
+	int estadoComparacion;
 
-		char otraPrueba[1234];
-		char sinCero[]="hola";
-	sinCero[4]='x';
-	sprintf(otraPrueba,"%s, %s, %s", "Porfirio", sinCero, "Thiago Lisandro");
+	estadoComparacion=2;
 
-	//otraPrueba[3]= 'x';
-	if(*(otraPrueba+31)== '\0')
+	if(primerPasajero != NULL && segundoPasajero !=NULL)
 	{
-		printf("\n\nBarra 0\n\n");
-	}
-	if(isspace(*(otraPrueba+5)))
-	{
-		printf("Espacio");
-	}
-
-	printf("%c", *(otraPrueba+30));
-
-
-	printf("\n\n%s\n\n", otraPrueba);
-
-	for(int i=0;i<100;i++)
-	{
-		if(*(otraPrueba+i) == '\0')
+		estadoComparacion = strcmp(primerPasajero->lastName, segundoPasajero->lastName);
+		if(estadoComparacion ==-1)
 		{
-			printf("\nRompio");
-			break;
+			if(Passenger_SwapPassenger(primerPasajero, segundoPasajero))
+			{
+				estadoComparacion =2;
+			}
+		}
+	}
+	return estadoComparacion;
+}
+
+int Passenger_SwapPorNombreDescendente(Passenger* primerPasajero, Passenger* segundoPasajero)
+{
+	int estadoComparacion;
+
+	estadoComparacion=2;
+
+	if(primerPasajero != NULL && segundoPasajero !=NULL)
+	{
+		estadoComparacion = strcmp(primerPasajero->name, segundoPasajero->name);
+		if(estadoComparacion ==-1)
+		{
+			if(Passenger_SwapPassenger(primerPasajero, segundoPasajero))
+			{
+				estadoComparacion =2;
+			}
+		}
+	}
+	return estadoComparacion;
+}
+
+int Passenger_SwapPassengerPorApellidoYNombre(Passenger* primerPasajero, Passenger* segundoPasajero, int (*pFuncionSwapeoApellido)(Passenger*, Passenger*), int (*pFuncionSwapeoNombre)(Passenger*, Passenger*))
+{
+	int retorno;
+	int estadoSwapApellido;
+	int estadoSwapNombre;
+
+	retorno =2;
+
+	if(primerPasajero != NULL && segundoPasajero != NULL && pFuncionSwapeoApellido != NULL && pFuncionSwapeoNombre != NULL)
+	{
+		estadoSwapApellido = pFuncionSwapeoApellido(primerPasajero, segundoPasajero);
+		retorno=estadoSwapApellido;
+
+		if(estadoSwapApellido !=2)
+		{
+			if(estadoSwapApellido == 0)
+			{
+				estadoSwapNombre = pFuncionSwapeoNombre(primerPasajero, segundoPasajero);
+				retorno=estadoSwapNombre;
+			}
+		}
+	}
+
+	return retorno;
+}
+
+int sortPassengers(Passenger* list, int len, int order)
+{
+	int retorno;
+	int flagSwap;
+	int estadoSwapAscendente;
+	int limiteDecremental;
+	int (*pFuncionSwapeoApellido) (Passenger*, Passenger*);
+	int (*pFuncionSwapeoNombre) (Passenger*, Passenger*);
+
+
+	retorno=1;
+
+	if(list != NULL && len >0 && (order == 0 || order ==1))
+	{
+		limiteDecremental= len-1;
+		retorno=0;
+
+		if(order)
+		{
+			pFuncionSwapeoApellido = Passenger_SwapPorApellidoAscendente;
+		    pFuncionSwapeoNombre = Passenger_SwapPorNombreAscendente;
 		}
 		else
 		{
-			printf("%c", *(otraPrueba+i));
+			pFuncionSwapeoApellido = Passenger_SwapPorApellidoDescendente;
+		    pFuncionSwapeoNombre = Passenger_SwapPorNombreDescendente;
 		}
-	}
-
-
-	//array_MoverAdelanteUnInt(numeroPrueba);
-	/*
-	for(int i=0; i<2;i++)
-	{
-		printf("Numero: %d\n", *(numeroPrueba+i));
-	}
-
-	//printf("%d\n%d\n", *numeroPrueba, *(numeroPrueba+1));
-	*/
-
-
-
-
-/*
-char* utn_UnirNombreYApellido(char* nombre, char* apellido, int cantidadDeCaracteresNombreYApellido)
-{
-	int retorno;
-	char* bufferCadena;
-	retorno=1;
-
-	if(nombre!=NULL && apellido!=NULL && depositoDeNombreYApellido!=NULL)
-	{
-
-
-		depositoDeNombreYApellido=memoria_NewCharConTamanio(cantidadCaracteres);
-		if(depositoDeNombreYApellido!=NULL)
-		{
-			sprintf(depositoDeNombreYApellido,"%s, %s", apellido,nombre);
-		}
-		if(*(depositoDeNombreYApellido+cantidadCaracteres)== '\0')
-		{
-			printf("\n\nHay BARRA0\n\n");
-		}
-		//*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
-		retorno=0;
-	}
-	return retorno;
-}
-
-int myGets(char* direccionCadenaCaracteres, int longitud)
-{
-	int retorno;
-	char* bufferString;
-
-	retorno = 1;
-	if(longitud>1 && direccionCadenaCaracteres != NULL)
-	{
-		bufferString=NULL;
-		bufferString= memoria_NewCharConTamanio(longitud);
-
-		if(bufferString!=NULL)
-		{
-			fflush(stdin);
-			if(fgets(bufferString, sizeof(char)* longitud, stdin) != NULL)
-			{
-				if(*(bufferString +strnlen(bufferString, sizeof(char)* longitud)-1) == '\n')
-				{
-					*(bufferString +strnlen(bufferString, sizeof(char)* longitud)-1) = '\0';
-				}
-				if(strnlen(bufferString, sizeof(char)* longitud) < longitud)
-				{
-					strncpy(direccionCadenaCaracteres, bufferString, longitud);
-					retorno = 0;
-				}
-			}
-			free(bufferString);
-		}
-	}
-	return retorno;
-}
-
-int utn_verificarSerNombre(char* cadenaDeCaracteres)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(cadenaDeCaracteres != NULL && *cadenaDeCaracteres !=' ')
-	{
-		retorno =0;
 
 		do{
-			if(utn_VerificarSerLetra(cadenaDeCaracteres))
+			flagSwap=0;
+			for(int i=0;i<limiteDecremental;i++)
 			{
-				if(isspace(*cadenaDeCaracteres))
-				{
-					if(*(cadenaDeCaracteres+1)=='\0')
+				estadoSwapAscendente = Passenger_SwapPassengerPorApellidoYNombre(&list[i], &list[i+1], pFuncionSwapeoApellido, pFuncionSwapeoNombre);
+				if(estadoSwapAscendente != 2)
+					{
+						if(estadoSwapAscendente == 1)
+						{
+							flagSwap =1;
+						}
+					}
+					else
 					{
 						retorno=1;
 						break;
 					}
-				}
-				else
-				{
-					retorno=1;
-					break;
-				}
 			}
-			cadenaDeCaracteres++;
-		}while(*cadenaDeCaracteres != '\0');
+			if(retorno)
+			{
+				break;
+			}
+
+			limiteDecremental--;
+		}while(flagSwap);
 	}
 	return retorno;
 }
-int getNombre(char* direccionPalabra, int cantidadDeCaracteres)
-{
-	int retorno;
-	char* bufferPalabra;
 
-	retorno=1;
-
-	if(direccionPalabra!=NULL && cantidadDeCaracteres>1)
-	{
-		bufferPalabra=NULL;
-		bufferPalabra = memoria_NewCharConTamanio(cantidadDeCaracteres);
-
-		if(bufferPalabra!=NULL)
-		{
-			if(!(myGets(bufferPalabra, cantidadDeCaracteres)) && !(utn_verificarSerNombre(bufferPalabra)))
-			{
-				retorno=0;
-				strncpy(direccionPalabra, bufferPalabra, cantidadDeCaracteres);
-			}
-			free(bufferPalabra);
-		}
-	}
-
-	return retorno;
-}
-
-int getNombre(char* direccionPalabra, int cantidadDeCaracteres)
-{
-	int retorno;
-	char* bufferPalabra;
-
-	retorno=1;
-
-	if(direccionPalabra!=NULL && cantidadDeCaracteres>1)
-	{
-		bufferPalabra=NULL;
-		bufferPalabra = memoria_NewCharConTamanio(cantidadDeCaracteres);
-
-		if(bufferPalabra!=NULL)
-		{
-			if(!(myGets(bufferPalabra, cantidadDeCaracteres)) && !(utn_verificarSerNombre(bufferPalabra)))
-			{
-				retorno=0;
-				strncpy(direccionPalabra, bufferPalabra, cantidadDeCaracteres);
-			}
-			free(bufferPalabra);
-		}
-	}
-
-	return retorno;
-}
-
-int utn_CorregirNombre(char* direccionPalabra)
-{
-	int retorno;
-	int banderaEspacio;
-
-	retorno=1;
-	banderaEspacio=0;
-
-	if(direccionPalabra !=NULL)
-	{
-		retorno =0;
-		*direccionPalabra = toupper(*direccionPalabra);
-		direccionPalabra++;
-
-		while(*direccionPalabra !='\0')
-		{
-			if(isalpha(*direccionPalabra))
-			{
-				if(banderaEspacio)
-				{
-					*direccionPalabra = toupper(*direccionPalabra);
-					banderaEspacio=0;
-				}
-				else
-				{
-					*direccionPalabra = tolower(*direccionPalabra);
-				}
-			}
-			else
-			{
-				banderaEspacio=1;
-			}
-			direccionPalabra++;
-		}
-	}
-	return retorno;
-}
+ *
+ */
 
 */

@@ -160,7 +160,6 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 
 	retorno =1;
 
-	printf("%c\n", *caracter);
 	if(caracter != NULL && (*caracter == 'á' ||
 			*caracter == 'é' ||
 			*caracter == 'í' ||
@@ -174,7 +173,20 @@ int utn_VerificarSerLetra_ASCII_EXTEND(char* caracter)
 			*caracter == 'ñ' ||
 			*caracter == 'Ñ'))
 	{
-		printf("no\n");
+		retorno=0;
+	}
+
+	return retorno;
+}
+
+int utn_VerificarSerLetraEspanol(char* caracter)
+{
+	int retorno;
+
+	retorno =1;
+
+	if(caracter!=NULL && utn_VerificarSerLetra(caracter) && utn_VerificarSerLetra_ASCII_EXTEND(caracter))
+	{
 		retorno=0;
 	}
 
@@ -192,11 +204,11 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 		retorno =0;
 
 		do{
-			if(utn_VerificarSerLetra(cadenaDeCaracteres))
+			if(utn_VerificarSerLetra(cadenaDeCaracteres) == 0 && utn_VerificarSerLetra_ASCII_EXTEND(cadenaDeCaracteres) == 0)
 			{
-				if(isspace(*cadenaDeCaracteres) || *cadenaDeCaracteres == '-')
+				if(*cadenaDeCaracteres == ' ' || *cadenaDeCaracteres == '-')
 				{
-					if(*(cadenaDeCaracteres+1)=='\0' && *(cadenaDeCaracteres+1) == '\0')
+					if(*(cadenaDeCaracteres+1)=='\0')
 					{
 						retorno=1;
 						break;
@@ -213,7 +225,6 @@ int utn_verificarSerNombre(char* cadenaDeCaracteres)
 	}
 	return retorno;
 }
-
 
 int utn_verificarSerCadenaAlfanumerica(char* cadenaCaracteres)
 {
@@ -370,7 +381,7 @@ int utn_CorregirNombre(char* direccionPalabra)
 
 		while(*direccionPalabra !='\0')
 		{
-			if(isalpha(*direccionPalabra))
+			if(utn_VerificarSerLetraEspanol(direccionPalabra))
 			{
 				if(banderaEspacio)
 				{
@@ -384,7 +395,11 @@ int utn_CorregirNombre(char* direccionPalabra)
 			}
 			else
 			{
-				banderaEspacio=1;
+				if(isspace(*direccionPalabra))
+				{
+					banderaEspacio=1;
+				}
+
 			}
 			direccionPalabra++;
 		}
@@ -501,61 +516,4 @@ int utn_GetCadenaAlfanumericaRango(char* direccionCadenaAlfanumerica, char* mens
 	}
 	return retorno;
 }
-
-
-/*
-int utn_getLetraRango(char* direccionLetra, char* mensaje, char* mensajeError, char letraMinima, char letraMaxima)
-{
-	int retorno;
-	char bufferLetra[1024];
-
-	retorno=1;
-
-	if(direccionLetra!=NULL &&
-			mensaje!=NULL &&
-			mensajeError!=NULL &&
-
-			letraMinima<=letraMaxima)
-	{
-
-		printf("%s", mensaje);
-		while(utn_getNombre(bufferLetra) || *bufferLetra < letraMinima || *bufferLetra > letraMaxima || strnlen(bufferLetra, sizeof(bufferLetra)) != 1)
-		{
-			printf("%s", mensajeError);
-		}
-		*direccionLetra = *bufferLetra;
-		retorno=0;
-	}
-	return retorno;
-}
-
-
-
-int utn_UnirNombreYApellido(char* nombre, char* apellido, char* depositoDeNombreYApellido)
-{
-	int retorno;
-	int cantidadCaracteres;
-	retorno=1;
-
-	if(nombre!=NULL && apellido!=NULL && depositoDeNombreYApellido!=NULL)
-	{
-		cantidadCaracteres = strlen(nombre)+ strlen(apellido);
-		cantidadCaracteres+=3;
-
-		depositoDeNombreYApellido=memoria_PrepararPunteroChar(cantidadCaracteres);
-		if(depositoDeNombreYApellido!=NULL)
-		{
-			sprintf(depositoDeNombreYApellido,"%s, %s", apellido,nombre);
-		}
-		if(*(depositoDeNombreYApellido+cantidadCaracteres)== '\0')
-		{
-			printf("\n\nHay BARRA0\n\n");
-		}
-		(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
-		retorno=0;
-	}
-
-	return retorno;
-}
-*/
 

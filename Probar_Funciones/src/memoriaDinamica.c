@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-
-int memoria_NewInt(int** punteroAPunteroFloatEstatico)
+/*
+int memoria_NewInt(int** punteroAPunteroint)
 {
 	int retorno;
 
@@ -176,3 +176,4 @@ int memoria_ReSizeChar(char** punteroAPunteroCharDinamico ,int nuevaLongitud)
 	}
 	return retorno;
 }
+*/

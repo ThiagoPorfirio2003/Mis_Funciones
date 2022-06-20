@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int memoria_NewInt(int** punteroAPunteroFloatEstatico)
+int memoria_NewInt(int** punteroAPunteroIntEstatico)
 {
 	int retorno;
 
 	retorno=1;
 
-	if(punteroAPunteroFloatEstatico!=NULL)
+	if(punteroAPunteroIntEstatico!=NULL)
 	{
-		*punteroAPunteroFloatEstatico=NULL;
-		*punteroAPunteroFloatEstatico= (int*) malloc(sizeof(int));
-		if(*punteroAPunteroFloatEstatico!=NULL)
+		*punteroAPunteroIntEstatico=NULL;
+		*punteroAPunteroIntEstatico= (int*) malloc(sizeof(int));
+		if(*punteroAPunteroIntEstatico!=NULL)
 		{
 			retorno=0;
 		}

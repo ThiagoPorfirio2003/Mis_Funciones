@@ -1,35 +1,5 @@
-10:09:20 **** Rebuild of configuration Debug for project Probar_Funciones ****
-Info: Internal Builder is used for build
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\findDato.o" "..\\src\\findDato.c" 
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\memoriaDinamica.o" "..\\src\\memoriaDinamica.c" 
-..\src\memoriaDinamica.c: In function 'memoria_ReSizeFloat':
-..\src\memoriaDinamica.c:147:78: warning: passing argument 1 of 'memoria_NewInt' from incompatible pointer type [-Wincompatible-pointer-types]
-  147 |  if(punteroAPunteroFloatDinamico!=NULL && nuevaLongitud>0 && !memoria_NewInt(&punteroAFloatAuxiliar))
-      |                                                                              ^~~~~~~~~~~~~~~~~~~~~~
-      |                                                                              |
-      |                                                                              float **
-..\src\memoriaDinamica.c:12:26: note: expected 'int **' but argument is of type 'float **'
-   12 | int memoria_NewInt(int** punteroAPunteroFloatEstatico)
-      |                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-..\src\memoriaDinamica.c: In function 'memoria_ReSizeChar':
-..\src\memoriaDinamica.c:167:77: warning: passing argument 1 of 'memoria_NewInt' from incompatible pointer type [-Wincompatible-pointer-types]
-  167 |  if(punteroAPunteroCharDinamico!=NULL && nuevaLongitud>0 && !memoria_NewInt(&punteroAFloatAuxiliar))
-      |                                                                             ^~~~~~~~~~~~~~~~~~~~~~
-      |                                                                             |
-      |                                                                             char **
-..\src\memoriaDinamica.c:12:26: note: expected 'int **' but argument is of type 'char **'
-   12 | int memoria_NewInt(int** punteroAPunteroFloatEstatico)
-      |                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\array.o" "..\\src\\array.c" 
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\Probar_Funciones.o" "..\\src\\Probar_Funciones.c" 
-..\src\Probar_Funciones.c:108:2: warning: "/*" within comment [-Wcomment]
-  108 |  /*
-      |   
-..\src\Probar_Funciones.c:140:4: warning: "/*" within comment [-Wcomment]
-  140 |   //*(depositoDeNombreYApellido+1+strnlen(depositoDeNombreYApellido, cantidadCaracteres))='\0';
-      |     
-gcc -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\utn.o" "..\\src\\utn.c" 
-gcc -o Probar_Funciones.exe "src\\Probar_Funciones.o" "src\\array.o" "src\\findDato.o" "src\\memoriaDinamica.o" "src\\utn.o" 
+12:13:57 **** Clean-only build of configuration Debug for project Probar_Funciones ****
+rm -rf src/findDato.d src/array.o src/memoriaDinamica.o src/utn.d src/memoriaDinamica.d src/findDato.o src/utn.o src/Probar_Funciones.d src/array.d src/Probar_Funciones.o Probar_Funciones.exe 
 
-10:09:21 Build Finished. 0 errors, 4 warnings. (took 946ms)
+12:13:57 Build Finished. 0 errors, 0 warnings. (took 95ms)
 

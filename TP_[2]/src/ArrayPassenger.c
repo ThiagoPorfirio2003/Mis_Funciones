@@ -127,7 +127,7 @@ int removePassenger(Passenger* list, int len, int id)
 }
 
 
-///
+
 
 int Passenger_SwapPassenger(Passenger* this, Passenger* pasajeroDeCambio)
 {
@@ -287,7 +287,6 @@ int sortPassengers(Passenger* list, int len, int order)
 	int flagSwap;
 	int estadoSwapAscendente;
 	int limiteDecremental;
-	int banderaAsistenciaPasajeroDos;
 	int (*pFuncionSwapApellido) (Passenger*, Passenger*);
 	int (*pFuncionSwapTipoPasajero) (Passenger*, Passenger*);
 	Passenger* pasajeroAuxiliarUno;
@@ -315,7 +314,6 @@ int sortPassengers(Passenger* list, int len, int order)
 			flagSwap=0;
 			for(int i=0;i<limiteDecremental;i++)
 			{
-				banderaAsistenciaPasajeroDos =1;
 				while(list[i].isEmpty ==1 && i<limiteDecremental)
 				{
 					i++;
@@ -324,7 +322,6 @@ int sortPassengers(Passenger* list, int len, int order)
 				while(list[i+1].isEmpty == 1 && i<limiteDecremental)
 				{
 					i++;
-					banderaAsistenciaPasajeroDos=0;
 				}
 				pasajeroAuxiliarDos = list + i+1;
 				/*
@@ -362,7 +359,6 @@ int sortPassengers(Passenger* list, int len, int order)
 	}
 	return retorno;
 }
-
 
 int Passenger_verificarYTransfomarEstadoVueloIntAString(char* estadoVueloString, int estadoVueloNumero)
 {
@@ -611,7 +607,6 @@ int sortPassengerByCode(Passenger* list, int len, int order)
 	int flagSwap;
 	int estadoSwapAscendente;
 	int limiteDecremental;
-	int banderaAsistenciaPasajeroDos;
 	int (*pFuncionSwapCodigoVuelo) (Passenger*, Passenger*);
 	int (*pFuncionSwapEstadoVuelo) (Passenger*, Passenger*);
 	Passenger* pasajeroAuxiliarUno;
@@ -639,7 +634,6 @@ int sortPassengerByCode(Passenger* list, int len, int order)
 			flagSwap=0;
 			for(int i=0;i<limiteDecremental;i++)
 			{
-				banderaAsistenciaPasajeroDos =1;
 				while(list[i].isEmpty ==1 && i<limiteDecremental)
 				{
 					i++;
@@ -648,7 +642,6 @@ int sortPassengerByCode(Passenger* list, int len, int order)
 				while(list[i+1].isEmpty == 1 && i<limiteDecremental)
 				{
 					i++;
-					banderaAsistenciaPasajeroDos=0;
 				}
 				pasajeroAuxiliarDos = list + i+1;
 				/*
@@ -920,93 +913,6 @@ int Passenger_getCantidaEncimaPrecioPromedio(Passenger* list, int cantidadPasaje
 	return retorno;
 }
 
-/*
-int calcularPromedioyCantidadEncimaPromedio(Passenger* list, float* promedioPrecios, int* cantidadPreciosSobrePromedio, int cantidadPasajerosTotal, int cantidadPasajerosActual,float acumuladorPrecio)
-{
-	int retorno;
-	int i;
-
-	retorno=-1;
-
-	if(promedioPrecios !=NULL && cantidadPreciosSobrePromedio != NULL && cantidadPasajerosActual > 0)
-	{
-		retorno=-1;
-		*promedioPrecios = acumuladorPrecio / cantidadPasajerosActual;
-		for(i=0;i<cantidadPasajerosTotal;i++)
-		{
-			if(list[i].price > *promedioPrecios && list[i].isEmpty ==0)
-			{
-				*cantidadPreciosSobrePromedio+=1;
-			}
-		}
-		if(i == cantidadPasajerosTotal)
-		{
-			retorno =0;
-		}
-	}
-	return retorno;
-}
-
-int acumuladorPrecio(Passenger* list, float* acumulador, int cantidadPasajeros)
-{
-	int retorno;
-	int i;
-
-	retorno= -1;
-
-	if(list != NULL && acumulador !=NULL && cantidadPasajeros>-1)
-	{
-
-		for(i=0;i<cantidadPasajeros;i++)
-		{
-			if(list[i].isEmpty ==0)
-			{
-				*acumulador +=list[i].price;
-				retorno=0;
-			}
-		}
-		if(i == cantidadPasajeros)
-		{
-			retorno =0;
-		}
-	}
-	return retorno;
-}
-
-int reasignarValoresParaComparar(Passenger* list, int cantidadPasajeros)
-{
-	int retorno;
-	int i;
-
-	retorno =-1;
-
-	if(list !=NULL && cantidadPasajeros>0)
-	{
-		retorno=0;
-		for(i=0;i<cantidadPasajeros;i++)
-		{
-			switch(list[i].typePassenger)
-			{
-				case 1: list[i].typePassenger=3;
-					break;
-
-				case 2: list[i].typePassenger=4;
-					break;
-
-				case 3: list[i].typePassenger=0;
-					break;
-
-				case 4:	list[i].typePassenger=1;
-					break;
-
-				default:list[i].typePassenger=2;
-					break;
-			}
-		}
-	}
-	return retorno;
-}
-*/
 int Passenger_askOnePassengerData(char* nombre, char* apellido, char* codigoVuelo,float* precio, int* tipoPasajero, int* statusFlight)
 {
 	int retorno;

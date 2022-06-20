@@ -272,6 +272,7 @@ int ll_remove(LinkedList* this,int index)
         	{
         		this->pFirstNode = pNodoAEliminar->pNextNode;
         	}
+        	free(pNodoAEliminar->pElement);
         	free(pNodoAEliminar);
         	this->size--;
         	returnAux=0;
@@ -442,10 +443,7 @@ void* ll_pop(LinkedList* this,int index)
     if(this != NULL && index < ll_len(this) && index > -1)
     {
     	returnAux= ll_get(this, index);
-    	if(returnAux != NULL)
-    	{
-    		ll_remove(this,index);
-    	}
+    	ll_remove(this,index);
     }
 
     return returnAux;
@@ -559,20 +557,12 @@ LinkedList* ll_subList(LinkedList* this,int from,int to)
 LinkedList* ll_clone(LinkedList* this)
 {
     LinkedList* cloneArray;
-    void* pElementoAuxiliar;
 
     cloneArray = NULL;
 
     if(this != NULL)
     {
-    	cloneArray = ll_newLinkedList();
-    	if(cloneArray != NULL)
-    	{
-    		for(int i=0; i< ll_get(this);i++)
-    		{
-    			ll_add(cloneArray,pElementoAuxiliar);
-    		}
-    	}
+    	cloneArray = ll_subList(this, 0, ll_len(this));
     }
 
     return cloneArray;
@@ -588,7 +578,56 @@ LinkedList* ll_clone(LinkedList* this)
  */
 int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
 {
-    int returnAux =-1;
+    int returnAux;
+    int tamanioThis;
+    int estadoSwap;
+    int estadoComparacion;
+    int banderaActivarSwap;
+    void* pElementoUno;
+    void* pElementoDos;
+
+    tamanioThis = ll_len(this);
+    returnAux =-1;
+    banderaActivarSwap=0;
+
+    if(this != NULL && pFunc != NULL && (order == 0 || order == 1))
+    {
+    	returnAux=0;
+    	do{
+    		estadoSwap =0;
+    		tamanioThis--;
+        	for(int i=0;i< tamanioThis;i++)
+        	{
+        		pElementoUno = ll_get(this,i);
+        		pElementoDos = ll_get(this,i+1);
+        		estadoComparacion = pFunc(pElementoUno,pElementoDos);
+
+        		if(order)
+        		{
+        			if(estadoComparacion>0)
+        			{
+        				banderaActivarSwap=1;
+        			}
+        		}
+        		else
+        		{
+        			if(estadoComparacion<0)
+        			{
+        				banderaActivarSwap=1;
+        			}
+        		}
+
+        		if(banderaActivarSwap)
+        		{
+            		ll_set(this,i+1, pElementoUno);
+            		ll_set(this,i, pElementoDos);
+        			banderaActivarSwap=0;
+    				estadoSwap=1;
+        		}
+        	}
+
+    	}while(estadoSwap);
+    }
 
     return returnAux;
 

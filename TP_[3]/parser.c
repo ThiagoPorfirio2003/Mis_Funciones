@@ -9,13 +9,6 @@
 
 #define PRECIO_MINIMO 10000
 
-/** \brief Parsea los datos los datos de los pasajeros desde el archivo data.csv (modo texto).
- *
- * \param path char*
- * \param pArrayListPassenger LinkedList*
- * \return int
- *
- */
 int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 {
 	int retorno;
@@ -27,27 +20,26 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 	char codigoVuelo[8];
 	char statusFlightCaracter[30];
 
-	int contadorTOTAL=0;
-
 	Passenger* nuevoPasajero;
 
 	retorno=1;
 
 	if(pFile != NULL && pArrayListPassenger != NULL)
 	{
+
 		fscanf(pFile,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", idCaracter, nombre, apellido, precioCaracter, codigoVuelo, tipoPasajeroCaracter, statusFlightCaracter);
+
 		while(7 == fscanf(pFile,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", idCaracter, nombre, apellido, precioCaracter, codigoVuelo, tipoPasajeroCaracter, statusFlightCaracter))
 		{
-			if((nuevoPasajero = Passenger_newParametros(idCaracter, nombre, apellido, precioCaracter, tipoPasajeroCaracter, codigoVuelo, statusFlightCaracter)) != NULL &&
+			nuevoPasajero = Passenger_newParametros(idCaracter, nombre, apellido, precioCaracter, tipoPasajeroCaracter, codigoVuelo, statusFlightCaracter);
+			if(nuevoPasajero   != NULL &&
 					!ll_add(pArrayListPassenger, nuevoPasajero))
 			{
-				if(!Passenger_MostrarUnPasajero(nuevoPasajero))
-				{
-					contadorTOTAL++;
-				}
+				Passenger_MostrarUnPasajero(nuevoPasajero);
 			}
 			else
 			{
+				retorno=2;
 				break;
 			}
 
@@ -62,15 +54,74 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
     return retorno;
 }
 
-/** \brief Parsea los datos los datos de los pasajeros desde el archivo data.csv (modo binario).
- *
- * \param path char*
- * \param pArrayListPassenger LinkedList*
- * \return int
- *
- */
 int parser_PassengerFromBinary(FILE* pFile , LinkedList* pArrayListPassenger)
 {
+	Passenger* nuevoPasajero;
+	int retorno;
+	int activarRomper;
+	int estadoLeido;
 
-    return 1;
+	activarRomper=0;
+
+	retorno =1;
+	estadoLeido=0;
+
+
+
+	if(pFile != NULL && pArrayListPassenger != NULL)
+	{
+		retorno=0;
+		while(!feof(pFile))
+		{
+			nuevoPasajero = Passenger_new();
+			if(nuevoPasajero != NULL)
+			{
+				estadoLeido = fread(nuevoPasajero, sizeof(Passenger), 1, pFile);
+
+				if(estadoLeido)
+				{
+					if(ll_add(pArrayListPassenger, nuevoPasajero))
+					{
+						activarRomper=1;
+					}
+					else
+					{
+						Passenger_MostrarUnPasajero(nuevoPasajero);
+					}
+				}
+
+			}
+			else
+			{
+				activarRomper=1;
+			}
+
+			if(activarRomper)
+			{
+				retorno =2;
+				break;
+			}
+		}
+	}
+
+    return retorno;
+}
+
+int parser_contadorFromBinary(FILE* pArchivo, int* pContador)
+{
+	int retorno;
+	int contadorADevolver;
+
+	retorno =1;
+
+	if(pArchivo != NULL && pContador != NULL)
+	{
+		if(fread(&contadorADevolver, sizeof(int), 1, pArchivo)>0)
+		{
+			*pContador = contadorADevolver;
+			retorno=0;
+		}
+	}
+
+	return retorno;
 }

@@ -22,32 +22,33 @@
 #define MENU_OPCION_MINIMA 1
 #define MENU_OPCION_MAXIMA 10
 
-//Falta todo lo binario, guardar los pasajeros si no se cargo previamente y el que el contador empieze en el ultimo id
-
 int main()
 {
 	setbuf(stdout, NULL);
 
+	int contadorId;
 	int option;
+	int quedarseEnPrograma;
 	int banderaOpcionUno;
 	int banderaOpcionDos;
 	int banderaOpcionTres;
-	int banderaOpcionSiete;
-//	int banderaOpcionOcho;
-	int banderaOpcionNueve;
 	int banderaOpcionDiez;
-
+	int modoGuardado;
+	int mostrarPasajerosBinario;
+	int mostrarPasajerosTexto;
 	LinkedList* listaPasajeros;
+
+
 	banderaOpcionUno = 0;
 	banderaOpcionDos = 0;
 	banderaOpcionTres = 0;
-	banderaOpcionSiete = 0;
-//	banderaOpcionOcho = 0;
-	banderaOpcionNueve = 0;
 	banderaOpcionDiez = 0;
+	quedarseEnPrograma=1;
+	modoGuardado=-1;
 
     listaPasajeros = ll_newLinkedList();
-    int contadorId = 0;
+
+    while(controller_loadFromBinaryContador("contador.bin" , &contadorId));
 
     do{
 		printf("---------------------Menu-----------------------\n"
@@ -67,15 +68,23 @@ int main()
 			switch(option)
 			{
 				case 1:
-					if(!banderaOpcionUno)
+					if(!banderaOpcionUno && !banderaOpcionDos)
 					{
-						if(!controller_loadFromText("data.csv",listaPasajeros))
+						switch(controller_loadFromText("data.csv",listaPasajeros))
 						{
-							banderaOpcionUno=1;
-						}
-						else
-						{
-							printf("\n\nHa habido un error en la lectura del archivo\n\n");
+							case 0:
+								printf("\n\nSe cargaron con exito todos los pasajeros\n\n");
+								banderaOpcionUno=1;
+								break;
+
+							case 1:
+								printf("\n\nHa habido un error en la lectura del archivo\n\n");
+								break;
+
+							case 2:
+								printf("\n\nNo se pudieron cargar algunos los archivos\n\n");
+								banderaOpcionUno=1;
+								break;
 						}
 					}
 					else
@@ -85,6 +94,29 @@ int main()
 					break;
 
 				case 2:
+					if(!banderaOpcionUno && !banderaOpcionDos)
+					{
+						switch(controller_loadFromBinary("data.bin",listaPasajeros))
+						{
+							case 0:
+								printf("\n\nSe cargaron con exito todos los pasajeros\n\n");
+								banderaOpcionDos=1;
+								break;
+
+							case 1:
+								printf("\n\nHa habido un error en la lectura del archivo\n\n");
+								break;
+
+							case 2:
+								printf("\n\nNo se pudieron cargar algunos los archivos\n\n");
+								banderaOpcionDos=1;
+								break;
+						}
+					}
+					else
+					{
+						printf("\n\nNo se puede cargar el archivo si ya lo hiciste antes\n\n");
+					}
 					break;
 
 				case 3:
@@ -95,6 +127,8 @@ int main()
 					else
 					{
 						banderaOpcionTres=1;
+						banderaOpcionDiez=0;
+						while(controller_saveAsBinaryContador("contador.bin" , &contadorId));
 					}
 
 					break;
@@ -102,9 +136,20 @@ int main()
 				case 4:
 					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionTres)
 					{
-						if(controller_editPassenger(listaPasajeros))
+						switch(controller_editPassenger(listaPasajeros))
 						{
-							printf("\n\nHa ocurrido un error en la modificacion del pasajero\n\n");
+							case 0:
+								printf("\n\nEl pasajero se ha modificado con exito\n\n");
+								banderaOpcionDiez=0;
+								break;
+
+							case -1:
+								printf("\n\nHa ocurrido un error en la modificacion del pasajero\n\n");
+								break;
+
+							case 1:
+								printf("\n\nHa ocurrido un error debido a que el puntero recibido es nulo\n\n");
+								break;
 						}
 					}
 					else
@@ -120,15 +165,16 @@ int main()
 						switch(controller_removePassenger(listaPasajeros))
 						{
 							case -1:
-								printf("\n\nHa ocurrido un error en la eliminacion del pasajero\n\n");
+								printf("\n\nNo se ha encontrado el pasajero que desea eliminar\n\n");
 							break;
 
 							case 0:
 								printf("\n\nSe ha eliminado con exito al pasajero\n\n");
+								banderaOpcionDiez=0;
 								break;
 
 							case 1:
-								printf("\n\nSe ha eliminado pasajero, pero no se han podidio eliminar sus rastros de la lista\n\n");
+								printf("\n\nHa ocurrido un error en la eliminacion del pasajero\n\n");
 								break;
 
 							case 2:
@@ -145,9 +191,20 @@ int main()
 				case 6:
 					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionTres)
 					{
-						if(controller_ListPassenger(listaPasajeros))
+						switch(controller_ListPassenger(listaPasajeros))
 						{
-							printf("\n\nHa ocurrido un error en la lectura del pasajero siguiente al ultimo mostrado\n\n");
+							case 0:
+								printf("\n\nNO ha habido incovenientes a la hora de mostrar los pasajeros\n\n");
+								break;
+
+							case 1:
+								printf("\n\nHa ocurrido un error debido a que el puntero recibido es nulo\n\n");
+
+								break;
+
+							case 2:
+								printf("\n\nHa ocurrido un error en la lectura de al menos un pasajero\n\n");
+								break;
 						}
 					}
 					else
@@ -158,46 +215,90 @@ int main()
 					break;
 
 				case 7:
-					banderaOpcionSiete=1;
-					Passenger_OrdenarPorApellidoYNombreAscendente(listaPasajeros);
+					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionTres)
+					{
+						switch(controller_sortPassenger(listaPasajeros))
+						{
+							case -1:
+								printf("\n\nNo se pueden ordenar los pasajeros, debido a que el puntero es nulo\n\n");
+								break;
+
+							case 0:
+								printf("\n\nLos pasajeros han sido ordenados con exito\n\n");
+								banderaOpcionDiez=0;
+								break;
+
+							case 1:
+								printf("\n\nHa habido un error a la hora de elejir los criterios de ordenamiento\n\n");
+								break;
+						}
+					}
+					else
+					{
+						printf("\n\nNo se pueden ordenar los pasajeros, debido a que no hay ninguno cargado\n\n");
+					}
+
 					break;
 
 				case 8:
-					if(banderaOpcionUno || banderaOpcionDos || banderaOpcionSiete)
+				case 9:
+					if(banderaOpcionUno || banderaOpcionDos)
 					{
-						if(controller_saveAsText("data.csv",listaPasajeros))
-						{
-							printf("\n\nHubo problemas en el guardado\n\n");
-						}
-						banderaOpcionDiez=1;
+						modoGuardado =1;
 					}
 					else
 					{
 						if(banderaOpcionTres)
 						{
-							if(controller_addAsText("data.csv", listaPasajeros))
-							{
-								printf("\n\nHubo problemas en el guardado\n\n");
-							}
-							banderaOpcionDiez=1;
+							modoGuardado=0;
 						}
 						else
 						{
 							printf("\n\nNo se pueden guardar los pasajeros, debido a que no hay ninguno cargado\n\n");
 						}
-
 					}
 
+					if(option == 8)
+					{
+						mostrarPasajerosBinario = 0;
+						mostrarPasajerosTexto = 1;
+					}
+					else
+					{
+						if(option == 9)
+						{
+							mostrarPasajerosBinario = 1;
+							mostrarPasajerosTexto = 0;
+						}
+					}
 
-					break;
+					if(modoGuardado != -1)
+					{
+						switch(controller_saveTextAndBinary("data.csv", "data.bin", listaPasajeros, modoGuardado, mostrarPasajerosBinario, mostrarPasajerosTexto))
+						{
+							case 0:
+								printf("\n\nLos archivos se han guardado con exito\n\n");
+								banderaOpcionDiez=1;
+								break;
 
-				case 9:
+							case 1:
+								printf("\n\nHa habido un error en el guardado del archivo\n\n");
+								break;
+
+							case 2:
+								printf("\n\nNo se pudieron guardar algunos los archivos\n\n");
+								banderaOpcionDiez=1;
+								break;
+						}
+					}
 					break;
 
 				case 10:
-					if(banderaOpcionNueve || banderaOpcionDiez)
+					if(banderaOpcionDiez)
 					{
+						quedarseEnPrograma=0;
 						printf("\n\nSaliendo...\n\n");
+						while(ll_deleteLinkedList(listaPasajeros));
 					}
 					else
 					{
@@ -205,135 +306,11 @@ int main()
 					}
 					break;
 			}
-			printf("\n");
+			printf("\n\n");
 		}
-    }while(option != 10);
+    }while(quedarseEnPrograma);
+
+    ll_deleteLinkedList(listaPasajeros);
+
     return 0;
 }
-
-/*
- * int Passenger_SwapPorApellidoDescendente(Passenger* primerPasajero, Passenger* segundoPasajero)
-{
-	int estadoComparacion;
-
-	estadoComparacion=2;
-
-	if(primerPasajero != NULL && segundoPasajero !=NULL)
-	{
-		estadoComparacion = strcmp(primerPasajero->lastName, segundoPasajero->lastName);
-		if(estadoComparacion ==-1)
-		{
-			if(Passenger_SwapPassenger(primerPasajero, segundoPasajero))
-			{
-				estadoComparacion =2;
-			}
-		}
-	}
-	return estadoComparacion;
-}
-
-int Passenger_SwapPorNombreDescendente(Passenger* primerPasajero, Passenger* segundoPasajero)
-{
-	int estadoComparacion;
-
-	estadoComparacion=2;
-
-	if(primerPasajero != NULL && segundoPasajero !=NULL)
-	{
-		estadoComparacion = strcmp(primerPasajero->name, segundoPasajero->name);
-		if(estadoComparacion ==-1)
-		{
-			if(Passenger_SwapPassenger(primerPasajero, segundoPasajero))
-			{
-				estadoComparacion =2;
-			}
-		}
-	}
-	return estadoComparacion;
-}
-
-int Passenger_SwapPassengerPorApellidoYNombre(Passenger* primerPasajero, Passenger* segundoPasajero, int (*pFuncionSwapeoApellido)(Passenger*, Passenger*), int (*pFuncionSwapeoNombre)(Passenger*, Passenger*))
-{
-	int retorno;
-	int estadoSwapApellido;
-	int estadoSwapNombre;
-
-	retorno =2;
-
-	if(primerPasajero != NULL && segundoPasajero != NULL && pFuncionSwapeoApellido != NULL && pFuncionSwapeoNombre != NULL)
-	{
-		estadoSwapApellido = pFuncionSwapeoApellido(primerPasajero, segundoPasajero);
-		retorno=estadoSwapApellido;
-
-		if(estadoSwapApellido !=2)
-		{
-			if(estadoSwapApellido == 0)
-			{
-				estadoSwapNombre = pFuncionSwapeoNombre(primerPasajero, segundoPasajero);
-				retorno=estadoSwapNombre;
-			}
-		}
-	}
-
-	return retorno;
-}
-
-int sortPassengers(Passenger* list, int len, int order)
-{
-	int retorno;
-	int flagSwap;
-	int estadoSwapAscendente;
-	int limiteDecremental;
-	int (*pFuncionSwapeoApellido) (Passenger*, Passenger*);
-	int (*pFuncionSwapeoNombre) (Passenger*, Passenger*);
-
-
-	retorno=1;
-
-	if(list != NULL && len >0 && (order == 0 || order ==1))
-	{
-		limiteDecremental= len-1;
-		retorno=0;
-
-		if(order)
-		{
-			pFuncionSwapeoApellido = Passenger_SwapPorApellidoAscendente;
-		    pFuncionSwapeoNombre = Passenger_SwapPorNombreAscendente;
-		}
-		else
-		{
-			pFuncionSwapeoApellido = Passenger_SwapPorApellidoDescendente;
-		    pFuncionSwapeoNombre = Passenger_SwapPorNombreDescendente;
-		}
-
-		do{
-			flagSwap=0;
-			for(int i=0;i<limiteDecremental;i++)
-			{
-				estadoSwapAscendente = Passenger_SwapPassengerPorApellidoYNombre(&list[i], &list[i+1], pFuncionSwapeoApellido, pFuncionSwapeoNombre);
-				if(estadoSwapAscendente != 2)
-					{
-						if(estadoSwapAscendente == 1)
-						{
-							flagSwap =1;
-						}
-					}
-					else
-					{
-						retorno=1;
-						break;
-					}
-			}
-			if(retorno)
-			{
-				break;
-			}
-
-			limiteDecremental--;
-		}while(flagSwap);
-	}
-	return retorno;
-}
-
- *
- */

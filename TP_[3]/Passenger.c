@@ -295,8 +295,9 @@ Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoSt
 	int tipoPasajeroNumero;
 	int idNumero;
 	float precioNumero;
-	int retorno;
+	int activarDelete;
 
+	activarDelete=1;
 	nuevoPasajero = Passenger_new();
 	if(nuevoPasajero != NULL && nombreStr != NULL && idStr != NULL && apellidoStr != NULL && precioStr != NULL && tipoPasajeroStr != NULL &&
 			codigoVueloStr != NULL && statusFlight != NULL &&
@@ -310,10 +311,11 @@ Passenger* Passenger_newParametros(char* idStr,char* nombreStr, char* apellidoSt
 				!Passenger_verificarYTransfomarTipoPasajeroStringAInt(tipoPasajeroStr, &tipoPasajeroNumero) &&
 				!Passenger_setAll(nuevoPasajero, idNumero, nombreStr,apellidoStr, codigoVueloStr, tipoPasajeroNumero, precioNumero, statusFlightNumero))
 		{
-			retorno=0;
+			activarDelete=0;
 		}
 	}
-	if(retorno)
+
+	if(activarDelete)
 	{
 		Passenger_delete(nuevoPasajero);
 	}
@@ -535,6 +537,52 @@ int Passenger_getEstadoVuelo(Passenger* this,int* estadoDeVuelo)
 	return retorno;
 }
 
+int Passenger_setAll(Passenger* pasajeroASetear, int id, char* nombre,char* apellido, char* codigoVuelo, int tipoPasajero, float precio, int estadoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+	if(pasajeroASetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL)
+	{
+		if(!Passenger_setId(pasajeroASetear, id) &&
+				!Passenger_setNombre(pasajeroASetear, nombre) &&
+				!Passenger_setApellido(pasajeroASetear, apellido) &&
+				!Passenger_setTipoPasajero(pasajeroASetear, tipoPasajero) &&
+				!Passenger_setPrecio(pasajeroASetear, precio) &&
+				!Passenger_setEstadoVuelo(pasajeroASetear, estadoVuelo) &&
+				!Passenger_setCodigoVuelo(pasajeroASetear, codigoVuelo))
+		{
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+int Passenger_getAll(Passenger* pPasajeroAGetear, int* id, char* nombre,char* apellido, char* codigoVuelo, int* tipoPasajero, float* precio, int* estadoVuelo)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(pPasajeroAGetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL &&
+			id != NULL && tipoPasajero !=NULL && precio !=NULL && estadoVuelo !=NULL)
+	{
+		if(!Passenger_getId(pPasajeroAGetear, id) &&
+				!Passenger_getNombre(pPasajeroAGetear, nombre) &&
+				!Passenger_getApellido(pPasajeroAGetear, apellido) &&
+				!Passenger_getTipoPasajero(pPasajeroAGetear, tipoPasajero)&&
+				!Passenger_getPrecio(pPasajeroAGetear, precio)  &&
+				!Passenger_getEstadoVuelo(pPasajeroAGetear, estadoVuelo) &&
+				!Passenger_getCodigoVuelo(pPasajeroAGetear, codigoVuelo))
+		{
+			retorno=0;
+		}
+	}
+
+	return retorno;
+}
+
+
 
 int Passenger_modificarNombre(Passenger* pasajeroAManipular, char* mensaje, char* mensajeError, char* mensajeErrorSinMemoria)
 {
@@ -577,17 +625,34 @@ int Passenger_ModificarCodigoVuelo(Passenger* pasajeroAManipular, char* mensaje,
 {
 	int retorno;
 	char codigoVuelo[CARACTERES_CODIGOVUELO];
+	int pedirOtroCodigo;
 
 	retorno=1;
+	pedirOtroCodigo=1;
 
 	if(pasajeroAManipular!=NULL && mensaje !=NULL && mensajeError != NULL && mensajeErrorSinMemoria != NULL && mensajeCodigoInvalido !=NULL)
 	{
+		do{
+			utn_GetCadenaAlfanumericaRango(codigoVuelo, mensaje, mensajeError, mensajeCodigoInvalido, CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9);
+
+			if(Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
+			{
+				printf("%s",mensajeCodigoInvalido);
+			}
+			else
+			{
+				pedirOtroCodigo=0;
+			}
+
+		}while(pedirOtroCodigo);
+
+		/*
 		while(utn_GetCadenaAlfanumericaRango(codigoVuelo, mensaje, mensajeError, mensajeCodigoInvalido, CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, 9) ||
-//				Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
+				Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
 		{
 			printf("%s",mensajeCodigoInvalido);
 		}
-
+		*/
 		utn_trasnformarCadenaAMayuscula(codigoVuelo);
 
 		if(!Passenger_setCodigoVuelo(pasajeroAManipular, codigoVuelo))
@@ -659,8 +724,10 @@ int Passenger_ModificarEstadoVuelo(Passenger* pasajeroAManipular, char* mensaje,
 int Passenger_askOnePassengerData(char* nombre, char* apellido, float* precio, int* tipoPasajero, char* codigoVuelo, int* statusFlight)
 {
 	int retorno;
+	int pedirOtroCodigo;
 
 	retorno=1;
+	pedirOtroCodigo=1;
 
 	if(nombre != NULL && apellido != NULL && precio != NULL && tipoPasajero != NULL && codigoVuelo != NULL && statusFlight != NULL &&
 			!utn_GetNombreRango(nombre, "\nIngrese el nombre del pasajero: ", "Dato invalido. Ingrese el NOMBRE del pasajero: ", "\nHubo un error debido a faltante de memoria", 2, CANTIDAD_MAXIMA_CARACTERES_NOMBRE, CANTIDAD_CARACTERES_NOMBRE) &&
@@ -669,11 +736,26 @@ int Passenger_askOnePassengerData(char* nombre, char* apellido, float* precio, i
 			!utn_GetIntRango(tipoPasajero, "\nTipo de pasajero:\n 1. FirstClass  \n 2. ExecutiveClass\n 3. EconomyClass\nIngrese el numero correspondiente al tipo: ", "Dato invalido. Ingrese el numero correspondiente al tipo: ", TIPO_PASAJERO_OPCION_MINIMA, TIPO_PASAJERO_OPCION_MAXIMA, 5) &&
 			!utn_GetIntRango(statusFlight, "\nEstado de vuelo:\n 1. Aterrizado\n 2. En horario\n 3. Demorado\n 4. En vuelo \nIngrese el numero que corresponda: ", "Dato ingresado invalido. Ingrese el numero que corresponda: ", ESTADO_VUELO_OPCION_MINIMA, ESTADO_VUELO_OPCION_MAXIMA, 5))
 	{
+
+		do{
+			utn_GetCadenaAlfanumericaRango(codigoVuelo, "\nTeniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\nNo se puede realizar la operacion debido a que ya no hay memoria\n", CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, CARACTERES_CODIGOVUELO);
+
+			if(Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
+			{
+				printf("%s","\nEl codigo ingresado no cumple con los requisitos\n");
+			}
+			else
+			{
+				pedirOtroCodigo=0;
+			}
+
+		}while(pedirOtroCodigo);
+		/*
 		while(utn_GetCadenaAlfanumericaRango(codigoVuelo, "\nTeniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "Dato invalido. Teniendo como modelo \"AA1234A\", ingrese el codigo de vuelo: ", "\nNo se puede realizar la operacion debido a que ya no hay memoria\n", CANTIDAD_MINIMA_CARACTERES_CODIGOVUELO, CANTIDAD_MAXIMA_CARACTERES_CODIGOVUELO, CARACTERES_CODIGOVUELO) ||
 				Passenger_verificarSerCodigoDeVuelo(codigoVuelo))
 		{
 			printf("\nEl codigo ingresado no cumple con los requisitos\n");
-		}
+		}*/
 		utn_trasnformarCadenaAMayuscula(codigoVuelo);
 		retorno=0;
 	}
@@ -706,7 +788,7 @@ int Passenger_MostrarUnPasajero(Passenger* pPasajeroAMostrar)
     return retorno;
 }
 
-int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
+int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger, int estadoGuardarTodo, int mostrarPasajeros)
 {
 	int retorno;
 	int cantidadPasajerosAGuardar;
@@ -722,33 +804,35 @@ int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
 
 	Passenger* pPasajeroAGuardar;
 
-	retorno=-1;
+	retorno=1;
 
-	if(pFile != NULL && pArrayListPassenger != NULL)
+
+	if(pFile != NULL && pArrayListPassenger != NULL && (estadoGuardarTodo == 0 || estadoGuardarTodo==1) && (mostrarPasajeros == 0 || mostrarPasajeros ==1))
 	{
 		retorno=0;
 		cantidadPasajerosAGuardar = ll_len(pArrayListPassenger);
-		if(cantidadPasajerosAGuardar!= -1)
+		if(cantidadPasajerosAGuardar> 0)
 		{
-			fprintf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
+			if(estadoGuardarTodo)
+			{
+				fprintf(pFile,"id,name,lastname,price,flycode,typePassenger,statusFlight\n");
+			}
 			for(int i=0; i<cantidadPasajerosAGuardar;i++)
 			{
-				pPasajeroAGuardar= Passenger_new();
-				if(pPasajeroAGuardar != NULL)
-				{
-					pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i);
+				pPasajeroAGuardar=(Passenger*) ll_get(pArrayListPassenger, i);
 
-					if(pPasajeroAGuardar != NULL &&
-							!Passenger_getAll(pPasajeroAGuardar, &idAGuardar, nombreAGuardar, apellidoAGuardar, codigoVueloAGuardar, &tipoPasajero, &precioAGuardar, &estadoVueloNumero))
+				if(!Passenger_getAll(pPasajeroAGuardar, &idAGuardar, nombreAGuardar, apellidoAGuardar, codigoVueloAGuardar, &tipoPasajero, &precioAGuardar, &estadoVueloNumero))
+				{
+					if(!Passenger_verificarYTransfomarEstadoVueloIntAString(estadoVueloAGuardar, estadoVueloNumero) &&
+							!Passenger_verificarYTransfomarTipoPasajeroIntAString(tipoPasajeroAGuardar, tipoPasajero))
 					{
-						if(!Passenger_verificarYTransfomarEstadoVueloIntAString(estadoVueloAGuardar, estadoVueloNumero) &&
-								!Passenger_verificarYTransfomarTipoPasajeroIntAString(tipoPasajeroAGuardar, tipoPasajero))
+						if(fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n", idAGuardar, nombreAGuardar, apellidoAGuardar, precioAGuardar, codigoVueloAGuardar, tipoPasajeroAGuardar, estadoVueloAGuardar) < 0)
 						{
-							if(fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n", idAGuardar, nombreAGuardar, apellidoAGuardar, precioAGuardar, codigoVueloAGuardar, tipoPasajeroAGuardar, estadoVueloAGuardar) < 0)
-							{
-								retorno=1;
-							}
-							else
+							retorno=2;
+						}
+						else
+						{
+							if(mostrarPasajeros)
 							{
 								Passenger_MostrarUnPasajero(pPasajeroAGuardar);
 							}
@@ -761,177 +845,110 @@ int Passenger_saveAsText(FILE* pFile , LinkedList* pArrayListPassenger)
 	return retorno;
 }
 
-
-
-
-int Passenger_setAll(Passenger* pasajeroASetear, int id, char* nombre,char* apellido, char* codigoVuelo, int tipoPasajero, float precio, int estadoVuelo)
+int Passenger_saveAsBinary(FILE* pFile , LinkedList* pArrayListPassenger, int mostrarPasajero)
 {
 	int retorno;
+	int cantidadPasajerosAGuardar;
+	int pasajerosGuardadosPorIteracion;
+	Passenger* pPasajeroAGuardar;
 
-	retorno=1;
-	if(pasajeroASetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL)
+	retorno =1;
+	pasajerosGuardadosPorIteracion=1;
+
+	if(pFile != NULL && pArrayListPassenger != NULL && (mostrarPasajero == 0 || mostrarPasajero == 1))
 	{
-		if(!Passenger_setId(pasajeroASetear, id) &&
-				!Passenger_setNombre(pasajeroASetear, nombre) &&
-				!Passenger_setApellido(pasajeroASetear, apellido) &&
-				!Passenger_setTipoPasajero(pasajeroASetear, tipoPasajero) &&
-				!Passenger_setPrecio(pasajeroASetear, precio) &&
-				!Passenger_setEstadoVuelo(pasajeroASetear, estadoVuelo) &&
-				!Passenger_setCodigoVuelo(pasajeroASetear, codigoVuelo))
-		{
-			retorno=0;
-		}
-	}
-	return retorno;
-}
-
-int Passenger_getAll(Passenger* pPasajeroAGetear, int* id, char* nombre,char* apellido, char* codigoVuelo, int* tipoPasajero, float* precio, int* estadoVuelo)
-{
-	int retorno;
-
-	retorno=1;
-
-	if(pPasajeroAGetear != NULL && nombre != NULL && apellido != NULL && codigoVuelo != NULL &&
-			id != NULL && tipoPasajero !=NULL && precio !=NULL && estadoVuelo !=NULL)
-	{
-		if(!Passenger_getId(pPasajeroAGetear, id) &&
-				!Passenger_getNombre(pPasajeroAGetear, nombre) &&
-				!Passenger_getApellido(pPasajeroAGetear, apellido) &&
-				!Passenger_getTipoPasajero(pPasajeroAGetear, tipoPasajero)&&
-				!Passenger_getPrecio(pPasajeroAGetear, precio)  &&
-				!Passenger_getEstadoVuelo(pPasajeroAGetear, estadoVuelo) &&
-				!Passenger_getCodigoVuelo(pPasajeroAGetear, codigoVuelo))
-		{
-			retorno=0;
-		}
-	}
-
-	return retorno;
-}
-
-
-int Passenger_SwapPassenger(Passenger* this, Passenger* pasajeroDeCambio)
-{
-	int retorno;
-	Passenger pasajeroAuxiliar;
-
-	//pasajeroAuxiliar = Passenger_new();
-
-	retorno=1;
-	if(this != NULL && pasajeroDeCambio != NULL)// && pasajeroAuxiliar != NULL)
-	{
-		pasajeroAuxiliar = *this;
-		*this = *pasajeroDeCambio;
-		*pasajeroDeCambio = pasajeroAuxiliar;
 		retorno=0;
-	}
-
-//	Passenger_delete(pasajeroAuxiliar);
-
-	return retorno;
-}
-
-int Passenger_SwapPorApellidoAscendente(Passenger* this, Passenger* pasajeroDeCambio)
-{
-	int retorno;
-	char apellidoUno[CANTIDAD_CARACTERES_APELLIDO];
-	char apellidoDos[CANTIDAD_CARACTERES_APELLIDO];
-	int estadoSwap;
-
-	retorno=2;
-
-	if(this != NULL && pasajeroDeCambio != NULL)
-	{
-
-		if(!Passenger_getApellido(this, apellidoUno) && !Passenger_getApellido(pasajeroDeCambio, apellidoDos))
+		cantidadPasajerosAGuardar = ll_len(pArrayListPassenger);
+		if(cantidadPasajerosAGuardar > 0)
 		{
-			estadoSwap= strcmp(apellidoUno, apellidoDos);
-			if(estadoSwap==1)
+			for(int i=0; i<cantidadPasajerosAGuardar;i++)
 			{
-				Passenger_SwapPassenger(this,pasajeroDeCambio);
-			}
-			retorno= estadoSwap;
-		}
-	}
-	return retorno;
-}
+				pPasajeroAGuardar = (Passenger*) ll_get(pArrayListPassenger, i);
 
-int Passenger_SwapPorNombreAscendentre(Passenger* this, Passenger* pasajeroDeCambio)
-{
-	int retorno;
-	char nombreUno[CANTIDAD_CARACTERES_APELLIDO];
-	char nombreDos[CANTIDAD_CARACTERES_APELLIDO];
-
-	retorno=1;
-
-	if(this != NULL && pasajeroDeCambio != NULL)
-	{
-		if(!Passenger_getNombre(this, nombreUno) && !Passenger_getNombre(pasajeroDeCambio, nombreDos))
-		{
-			if(strcmp(nombreUno, nombreDos)==1)
-			{
-				Passenger_SwapPassenger(this,pasajeroDeCambio);
-				retorno=0;
-			}
-		}
-	}
-	return retorno;
-}
-
-int Passenger_OrdenarPorApellidoYNombreAscendente(LinkedList* pArrayListPassenger)
-{
-	int retorno;
-	int cantidadPasajeros;
-	int flagSwap;
-	int limiteDecremental;
-	int estadoSwapApellido;
-	int estadoSwapNombre;
-	Passenger* pasajeroAComparar;
-	Passenger* pasajeroACompararAuxiliar;
-
-	retorno=1;
-
-	if(pArrayListPassenger != NULL)
-	{
-		cantidadPasajeros = ll_len(pArrayListPassenger);
-		if(cantidadPasajeros != 1)
-		{
-			limiteDecremental= cantidadPasajeros-1;
-			retorno=0;
-				do{
-					flagSwap=0;
-					for(int i=0;i<limiteDecremental;i++)
+				if(pPasajeroAGuardar != NULL)
+				{
+					if(pasajerosGuardadosPorIteracion<fwrite(pPasajeroAGuardar, sizeof(Passenger), pasajerosGuardadosPorIteracion, pFile))
 					{
-						pasajeroAComparar= (Passenger*) ll_get(pArrayListPassenger,i);
-						pasajeroACompararAuxiliar = (Passenger*) ll_get(pArrayListPassenger,i+1);
+						retorno=2;
+					}
+					else
+					{
+						if(mostrarPasajero)
+						{
+							Passenger_MostrarUnPasajero(pPasajeroAGuardar);
 
-						if(pasajeroAComparar != NULL && pasajeroACompararAuxiliar !=NULL)
-						{
-							estadoSwapApellido = Passenger_SwapPorApellidoAscendente(pasajeroAComparar, pasajeroACompararAuxiliar);
-							if(estadoSwapApellido != 0)
-							{
-								if(estadoSwapApellido==1)
-								{
-									flagSwap=1;
-								}
-							}
-							else
-							{
-								estadoSwapNombre = Passenger_SwapPorNombreAscendentre(pasajeroAComparar, pasajeroACompararAuxiliar);
-								if(estadoSwapNombre==1)
-								{
-									flagSwap=1;
-								}
-							}
-						}
-						else
-						{
-							retorno=1;
-							break;
 						}
 					}
-					limiteDecremental--;
-				}while(flagSwap);
+				}
+			}
+		}
+	}
+
+	return retorno;
+}
+
+int Passenger_saveContadorIdAdBinary(FILE* pFile , int* contadorIdAguardar)
+{
+	int retorno;
+
+	retorno=1;
+
+	if(pFile != NULL && contadorIdAguardar != NULL)
+	{
+		if(fwrite(contadorIdAguardar, sizeof(int), 1, pFile) > 0)
+		{
+			retorno = 0;
+		}
+	}
+
+	return retorno;
+}
+
+int Passenger_CompararPorApellidoYNombre(void* pPrimerPasajero, void* pSegundoPasajero)
+{
+	int retorno;
+	int estadoComparacionApellido;
+
+	retorno =0;
+
+	if(pPrimerPasajero != NULL && pSegundoPasajero != NULL)
+	{
+		estadoComparacionApellido = strcmp((((Passenger*)pPrimerPasajero)->apellido), (((Passenger*)pSegundoPasajero)->apellido));
+
+		if(estadoComparacionApellido != 0)
+		{
+			retorno= estadoComparacionApellido;
+		}
+		else
+		{
+			retorno = strcmp((((Passenger*)pPrimerPasajero)->nombre), (((Passenger*)pSegundoPasajero)->nombre));
+		}
+	}
+	return retorno;
+}
+
+int Passenger_CompararPorId(void* pPrimerPasajero, void* pSegundoPasajero)
+{
+	int retorno;
+
+	retorno =0;
+
+	if(pPrimerPasajero != NULL && pSegundoPasajero != NULL)
+	{
+		if(((Passenger*)pPrimerPasajero)->id == ((Passenger*)pSegundoPasajero)->id)
+		{
+			retorno=0;
+		}
+		else
+		{
+			if(((Passenger*)pPrimerPasajero)->id < ((Passenger*)pSegundoPasajero)->id)
+			{
+				retorno =-1;
+			}
+			else
+			{
+				retorno=1;
+			}
 		}
 	}
 	return retorno;
